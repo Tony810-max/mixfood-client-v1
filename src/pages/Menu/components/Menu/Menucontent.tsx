@@ -116,9 +116,11 @@ const MenuContent = () => {
       </section>
 
       {/* Search and Filter */}
-      <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 px-4 py-4 md:px-6 md:py-5">
-        <SearchContent value={searchQuery} onSearchChange={setSearchQuery} />
-        <DropdownCategory onSelectCategory={setSelectedCategory} />
+      <div className="sticky top-[80px] z-30 border-y border-border/70 bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row md:px-6">
+          <SearchContent value={searchQuery} onSearchChange={setSearchQuery} />
+          <DropdownCategory onSelectCategory={setSelectedCategory} />
+        </div>
       </div>
 
       {/* Category Sections */}
