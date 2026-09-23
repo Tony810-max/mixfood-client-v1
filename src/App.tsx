@@ -3,6 +3,7 @@ import { BlockedUserToast } from "@/components/common/BlockedUserToast";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import RouteProgress from "@/components/common/RouteProgress";
 import RouteMeta from "@/components/seo/RouteMeta";
+import SupportChatbot from "@/components/common/SupportChatbot";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -95,6 +96,7 @@ const App = () => (
                 <GoogleAnalyticsPageViews />
                 <RouteProgress />
                 <RouteMeta />
+                <SupportChatbot />
                 <Suspense fallback={<RouteFallback />}>
                   <Routes>
                     {/* QR Table Ordering — no auth required */}
