@@ -36,7 +36,7 @@ export default function ChatPage() {
               }`}
             >
               {msg.senderType !== 'CUSTOMER' && (
-                <p className="text-xs font-semibold text-primary mb-0.5">{t.staff}</p>
+                <p className="text-xs font-semibold text-primary mb-0.5">{msg.senderType === 'SYSTEM' ? 'Trợ lý Mix Food' : t.staff}</p>
               )}
               <p>{msg.message}</p>
               <p
