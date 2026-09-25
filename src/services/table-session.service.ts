@@ -88,6 +88,11 @@ export interface MessageResponse {
   createdAt: string;
 }
 
+export interface SendMessageResponse {
+  customerMessage: MessageResponse;
+  chatbotMessage?: MessageResponse;
+}
+
 export interface StaffCallResponse {
   id: number;
   type: string;
@@ -154,9 +159,16 @@ export async function getOrders(sessionToken: string): Promise<OrderResponse[]> 
 }
 
 /** Send message to restaurant. */
-export async function sendMessage(sessionToken: string, message: string): Promise<MessageResponse> {
+export async function sendMessage(sessionToken: string, message: string): Promise<SendMessageResponse> {
   const api = sessionApi(sessionToken);
   const res = await api.post('/customer/messages', { message });
+  return res.data;
+}
+
+/** Chatbot conversations are deliberately not persisted. */
+export async function getChatbotReply(sessionToken: string, message: string): Promise<{ message: string }> {
+  const api = sessionApi(sessionToken);
+  const res = await api.post('/customer/chatbot/reply', { message });
   return res.data;
 }
 

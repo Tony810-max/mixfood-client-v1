@@ -8,7 +8,7 @@ const Location = () => {
   const { lang, t } = useLanguage();
 
   return (
-    <section id="reserve" className="py-24">
+    <section id="location" className="py-24">
       <div className="container mx-auto px-6">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

@@ -1,5 +1,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ROUTES } from "@/utils/const";
+import { FooterLink } from './FooterLink';
 
 const QuickLinks = () => {
   const { t } = useLanguage();
@@ -18,12 +19,7 @@ const QuickLinks = () => {
       <ul className="space-y-1.5 md:space-y-2">
         {quickLinks.map((link) => (
           <li key={link.href}>
-            <a
-              href={link.href}
-              className="text-gray-300 hover:text-red-500 transition-colors text-xs md:text-sm py-1 inline-block"
-            >
-              {link.label}
-            </a>
+            <FooterLink to={link.href}>{link.label}</FooterLink>
           </li>
         ))}
       </ul>

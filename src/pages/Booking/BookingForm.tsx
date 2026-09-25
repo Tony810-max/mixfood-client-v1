@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { useAuth } from "@/contexts/AuthContext"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -14,21 +14,11 @@ import { ROUTES } from "@/utils/const"
 import { logger } from "@/utils/logger"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
-import { CalendarIcon, Clock, Mail, Phone, User, Users } from "lucide-react"
+import { CalendarIcon, Mail, Phone, User, Users } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { BookingFormValues, bookingSchema } from "./utils/bookingSchema"
-
-// Keep the time selection inside the application instead of delegating it to
-// the browser's native time control. Native controls have no placeholder and
-// their mobile picker UI can exceed the page viewport.
-const BOOKING_TIME_OPTIONS = Array.from({ length: 78 }, (_, index) => {
-  const totalMinutes = 9 * 60 + index * 10
-  const hours = Math.floor(totalMinutes / 60)
-  const minutes = totalMinutes % 60
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
-})
 
 const minimumBookingTimeForDate = (date: Date) => {
   const selectedDate = new Date(date)
@@ -44,6 +34,15 @@ const minimumBookingTimeForDate = (date: Date) => {
   const time = `${String(minimumDateTime.getHours()).padStart(2, '0')}:${String(minimumDateTime.getMinutes()).padStart(2, '0')}`
   return time < BOOKING_WINDOW.OPEN ? BOOKING_WINDOW.OPEN : time
 }
+
+const BOOKING_HOURS = Array.from(
+  { length: Number(BOOKING_WINDOW.LAST_BOOKING.slice(0, 2)) - Number(BOOKING_WINDOW.OPEN.slice(0, 2)) + 1 },
+  (_, index) => Number(BOOKING_WINDOW.OPEN.slice(0, 2)) + index,
+)
+const BOOKING_MINUTES = Array.from({ length: 12 }, (_, index) => index * 5)
+
+const toTimeString = (hour: number, minute: number) =>
+  `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
 
 export const BookingForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -65,8 +64,8 @@ export const BookingForm = () => {
       specialRequests: "",
     },
   })
+  const selectedTime = form.watch('time')
 
-  // Calculate initial minTime when component mounts
   useEffect(() => {
     setMinTime(minimumBookingTimeForDate(form.getValues('date')))
   }, [])
@@ -115,6 +114,25 @@ export const BookingForm = () => {
         form.setValue('time', '', { shouldValidate: true })
       }
     }
+  }
+
+  const handleTimeChange = (type: 'hour' | 'minute', value: number) => {
+    const [currentHour, currentMinute] = (form.getValues('time') || minTime)
+      .split(':')
+      .map(Number)
+    const nextTime = toTimeString(
+      type === 'hour' ? value : currentHour,
+      type === 'minute' ? value : currentMinute,
+    )
+
+    if (nextTime >= minTime && nextTime <= BOOKING_WINDOW.LAST_BOOKING) {
+      form.setValue('time', nextTime, { shouldValidate: true, shouldDirty: true })
+    }
+  }
+
+  const isTimeAvailable = (hour: number, minute: number) => {
+    const time = toTimeString(hour, minute)
+    return time >= minTime && time <= BOOKING_WINDOW.LAST_BOOKING
   }
 
   return (
@@ -193,7 +211,7 @@ export const BookingForm = () => {
               )}
             />
 
-            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div>
               <FormField
                 control={form.control}
                 name="date"
@@ -201,7 +219,7 @@ export const BookingForm = () => {
                   <FormItem className="flex flex-col">
                     <FormLabel className="flex items-center gap-2">
                       <CalendarIcon className="h-4 w-4" />
-                      {t.bookingDate}
+                      {t.dateTime}
                     </FormLabel>
                     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                       <PopoverTrigger asChild>
@@ -212,64 +230,77 @@ export const BookingForm = () => {
                               !field.value && "text-muted-foreground"
                             }`}
                           >
-                            {field.value ? (
-                              format(field.value, "dd/MM/yyyy")
+                            {field.value && selectedTime ? (
+                              format(field.value, "dd/MM/yyyy") + ` ${selectedTime}`
                             ) : (
-                              <span>{t.bookingSelectDate}</span>
+                              <span>{t.bookingSelectDate} &amp; {t.bookingSelectTime}</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={handleDateSelect}
-                          disabled={(date) => {
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            return date < today;
-                          }}
-                          initialFocus
-                          className="rounded-lg border-amber-200"
-                          classNames={{
-                            day: "h-9 w-9 p-0 font-normal aria-selected:bg-primary-gradient aria-selected:text-white hover:bg-primary-gradient hover:text-white transition-colors",
-                            day_today: "bg-primary-gradient text-white",
-                            day_selected: "bg-primary-gradient text-white hover:bg-primary-gradient hover:text-white",
-                            day_disabled: "text-muted-foreground opacity-50",
-                                  }}
-                        />
+                      <PopoverContent className="w-auto max-w-[calc(100vw-2rem)] p-0" align="start">
+                        <div className="sm:flex">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={handleDateSelect}
+                            disabled={(date) => {
+                              const today = new Date()
+                              today.setHours(0, 0, 0, 0)
+                              return date < today
+                            }}
+                            initialFocus
+                            className="rounded-lg border-amber-200"
+                            classNames={{
+                              day: "h-9 w-9 p-0 font-normal aria-selected:bg-primary-gradient aria-selected:text-white hover:bg-primary-gradient hover:text-white transition-colors",
+                              day_today: "bg-primary-gradient text-white",
+                              day_selected: "bg-primary-gradient text-white hover:bg-primary-gradient hover:text-white",
+                              day_disabled: "text-muted-foreground opacity-50",
+                            }}
+                          />
+                          <div className="flex border-t border-amber-100 sm:h-[330px] sm:border-l sm:border-t-0">
+                            <ScrollArea className="w-1/2 sm:w-20">
+                              <div className="flex gap-1 p-2 sm:flex-col">
+                                {BOOKING_HOURS.map((hour) => {
+                                  const isSelected = selectedTime?.startsWith(`${String(hour).padStart(2, '0')}:`)
+                                  const available = BOOKING_MINUTES.some((minute) => isTimeAvailable(hour, minute))
+                                  return (
+                                    <Button key={hour} type="button" size="sm" variant={isSelected ? "default" : "ghost"} disabled={!available} className="shrink-0 sm:w-full" onClick={() => handleTimeChange('hour', hour)}>
+                                      {String(hour).padStart(2, '0')}
+                                    </Button>
+                                  )
+                                })}
+                              </div>
+                              <ScrollBar orientation="horizontal" className="sm:hidden" />
+                            </ScrollArea>
+                            <ScrollArea className="w-1/2 sm:w-20">
+                              <div className="flex gap-1 p-2 sm:flex-col">
+                                {BOOKING_MINUTES.map((minute) => {
+                                  const hour = Number((selectedTime || minTime).slice(0, 2))
+                                  const isSelected = selectedTime?.endsWith(`:${String(minute).padStart(2, '0')}`)
+                                  return (
+                                    <Button key={minute} type="button" size="sm" variant={isSelected ? "default" : "ghost"} disabled={!isTimeAvailable(hour, minute)} className="shrink-0 sm:w-full" onClick={() => handleTimeChange('minute', minute)}>
+                                      {String(minute).padStart(2, '0')}
+                                    </Button>
+                                  )
+                                })}
+                              </div>
+                              <ScrollBar orientation="horizontal" className="sm:hidden" />
+                            </ScrollArea>
+                          </div>
+                        </div>
                       </PopoverContent>
                     </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      {t.bookingTime}
-                    </FormLabel>
-                    <Select value={field.value || undefined} onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger className="h-11 rounded-xl border-amber-200 bg-card px-3.5 text-base focus:border-amber-500 focus:ring-amber-500 md:text-sm">
-                          <SelectValue placeholder={t.bookingTimePlaceholder} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-[min(20rem,var(--radix-select-content-available-height))] overflow-y-auto">
-                        {BOOKING_TIME_OPTIONS.map((time) => (
-                          <SelectItem key={time} value={time} disabled={time < minTime}>
-                            {time}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                render={() => (
+                  <FormItem className="mt-2">
                     <FormDescription className="text-xs text-amber-600">
                       {t.bookingTimeHelp}
                     </FormDescription>

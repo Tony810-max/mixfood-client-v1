@@ -26,4 +26,8 @@ describe('bookingSchema operating hours', () => {
   it.each(['08:59', '21:51'])('rejects time outside operating hours: %s', (time) => {
     expect(bookingSchema.safeParse(validBooking(time)).success).toBe(false);
   });
+
+  it.each(['', '9:00', '12:60', 'invalid'])('rejects malformed time: %s', (time) => {
+    expect(bookingSchema.safeParse(validBooking(time)).success).toBe(false);
+  });
 });

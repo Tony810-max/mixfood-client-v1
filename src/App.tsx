@@ -3,6 +3,7 @@ import { BlockedUserToast } from "@/components/common/BlockedUserToast";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import RouteProgress from "@/components/common/RouteProgress";
 import RouteMeta from "@/components/seo/RouteMeta";
+import SupportChatbot from "@/components/common/SupportChatbot";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -53,11 +54,15 @@ const RouteFallback = () => (
 
 /** Keep page navigation predictable, including when moving between long menu sections. */
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { hash, pathname } = useLocation();
 
   useEffect(() => {
+    if (hash) {
+      requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }));
+      return;
+    }
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, [pathname]);
+  }, [hash, pathname]);
 
   return null;
 };
@@ -91,6 +96,7 @@ const App = () => (
                 <GoogleAnalyticsPageViews />
                 <RouteProgress />
                 <RouteMeta />
+                <SupportChatbot />
                 <Suspense fallback={<RouteFallback />}>
                   <Routes>
                     {/* QR Table Ordering — no auth required */}

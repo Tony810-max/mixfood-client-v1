@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { SITE } from '@/constants/site';
 import {
   Popover,
   PopoverContent,
@@ -18,7 +19,7 @@ interface SocialShareProps {
 const SocialShare: React.FC<SocialShareProps> = ({
   title = "Mix Food - Ẩm Thực Thái Đà Nẵng",
   description = "Nhà hàng ẩm thực Thái chính thống tại Đà Nẵng. Thưởng thức các món ăn Thái Lan đặc sắc.",
-  url = typeof window !== 'undefined' ? window.location.href : 'https://mixfood.vn',
+  url = typeof window !== 'undefined' ? window.location.href : SITE.url,
   className = ""
 }) => {
   const [copied, setCopied] = useState(false);

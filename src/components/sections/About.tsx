@@ -6,7 +6,7 @@ const About = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="py-16 md:py-24 bg-secondary/50 relative overflow-hidden">
+    <section id="about" className="py-16 md:py-24 bg-secondary/50 relative overflow-hidden">
       {/* Subtle decorative pattern */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
         <svg width="100%" height="100%">

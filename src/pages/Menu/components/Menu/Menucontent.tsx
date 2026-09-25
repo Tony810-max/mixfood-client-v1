@@ -4,8 +4,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useMenu } from "@/hooks/api/useMenu";
 import { ROUTES } from "@/utils/const";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import restaurantImg from "../../../../assets/restaurant-interior.jpg";
 import CategorySection from "../CategorySection";
 import DropdownCategory from "./DropdownCategory";
@@ -14,8 +14,12 @@ import SearchContent from "./SearchContent";
 const MenuContent = () => {
   const { lang, t } = useLanguage();
   const { data: categories, isLoading, error } = useMenu();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const requestedQuery = searchParams.get('q') ?? '';
+  const [searchQuery, setSearchQuery] = useState(requestedQuery);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  useEffect(() => setSearchQuery(requestedQuery), [requestedQuery]);
 
   const filteredCategories = categories?.filter((category) => {
     const matchesCategory = !selectedCategory || selectedCategory === "all" || category.id === selectedCategory;
@@ -112,9 +116,11 @@ const MenuContent = () => {
       </section>
 
       {/* Search and Filter */}
-      <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 px-4 py-4 md:px-6 md:py-5">
-        <SearchContent onSearchChange={setSearchQuery} />
-        <DropdownCategory onSelectCategory={setSelectedCategory} />
+      <div className="sticky top-[80px] z-30 border-y border-border/70 bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row md:px-6">
+          <SearchContent value={searchQuery} onSearchChange={setSearchQuery} />
+          <DropdownCategory onSelectCategory={setSelectedCategory} />
+        </div>
       </div>
 
       {/* Category Sections */}

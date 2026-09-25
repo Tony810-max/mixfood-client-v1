@@ -12,4 +12,4 @@ Disallow: /reservations
 Disallow: /booking/success
 Disallow: /q/
 
-Sitemap: https://mixfood.vn/sitemap.xml
+Sitemap: https://mix-food.io.vn/sitemap.xml

@@ -9,7 +9,9 @@ export const bookingSchema = z.object({
   date: z.date({
     required_error: "Vui lòng chọn ngày đặt bàn",
   }),
-  time: z.string().min(1, "Vui lòng chọn giờ"),
+  time: z
+    .string()
+    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Vui lòng nhập giờ hợp lệ"),
   guests: z.coerce
     .number({ required_error: "Vui lòng nhập số lượng khách", invalid_type_error: "Vui lòng nhập số lượng khách" })
     .int()
@@ -50,7 +52,7 @@ export const bookingSchema = z.object({
   return true;
 }, {
   message: `Giờ đặt bàn phải trong khung ${BOOKING_WINDOW.OPEN} - ${BOOKING_WINDOW.LAST_BOOKING} và trước ít nhất ${VALIDATION.MIN_ADVANCE_BOOKING_MINUTES} phút`,
-  path: ["date"]
+  path: ["time"]
 })
 
 export interface IBookingInfo{

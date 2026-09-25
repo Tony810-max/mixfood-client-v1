@@ -7,6 +7,8 @@ import { GUEST_OPTIONS, INFORMATION_RESTAURANT, SOCIAL_LINKS, THAI_DISHES, TIME_
 
 // Re-export existing constants for backward compatibility
 export { GUEST_OPTIONS, INFORMATION_RESTAURANT, SOCIAL_LINKS, THAI_DISHES, TIME_SLOTS };
+export { MENU_TAG_PRESENTATIONS } from './menu';
+export { PUBLIC_PAGE_METADATA, PUBLIC_ROBOTS, RESTAURANT, SITE } from './site';
 
 // Booking-specific time slots (lunch and dinner service only)
 export const BOOKING_TIME_SLOTS = [

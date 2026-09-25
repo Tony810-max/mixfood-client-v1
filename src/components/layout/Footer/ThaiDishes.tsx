@@ -1,5 +1,6 @@
 import { THAI_DISHES } from "@/utils/const";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { FooterLink } from './FooterLink';
 
 const ThaiDishes = () => {
   const { t } = useLanguage();
@@ -11,12 +12,7 @@ const ThaiDishes = () => {
       <ul className="space-y-1.5 md:space-y-2">
         {thaiDishes.map((dish) => (
           <li key={dish.href}>
-            <a
-              href={dish.href}
-              className="text-gray-300 hover:text-red-500 transition-colors text-xs md:text-sm py-1 inline-block"
-            >
-              {dish.name}
-            </a>
+            <FooterLink to={dish.href}>{dish.name}</FooterLink>
           </li>
         ))}
       </ul>

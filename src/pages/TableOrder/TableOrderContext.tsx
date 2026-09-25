@@ -46,6 +46,14 @@ interface PaymentStatusEvent {
   status: string;
 }
 
+function mergeMessages(current: MessageResponse[], incoming: MessageResponse[]) {
+  const messagesById = new Map(current.map((message) => [message.id, message]));
+  incoming.forEach((message) => messagesById.set(message.id, message));
+  return [...messagesById.values()].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() || a.id - b.id,
+  );
+}
+
 // ─── CartItem ──────────────────────────────────────────────────────────────────
 
 export interface CartItem {
@@ -188,7 +196,7 @@ export function TableOrderProvider({
     });
 
     socket.on('STAFF_MESSAGE_RECEIVED', (msg: MessageResponse) => {
-      setMessages((prev) => [...prev, msg]);
+      setMessages((prev) => mergeMessages(prev, [msg]));
       chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     });
 
@@ -305,15 +313,15 @@ export function TableOrderProvider({
   const sendChat = async (text: string) => {
     if (!sessionToken || !text.trim()) return;
     try {
-      let msg;
+      let result;
       try {
-        msg = await sendMessage(sessionToken, text.trim());
+        result = await sendMessage(sessionToken, text.trim());
       } catch {
         // One silent retry — masks a transient timeout/cold-start blip
         // instead of the user having to notice the failure and resend.
-        msg = await sendMessage(sessionToken, text.trim());
+        result = await sendMessage(sessionToken, text.trim());
       }
-      setMessages((prev) => [...prev, { ...msg, senderType: 'CUSTOMER' }]);
+      setMessages((prev) => mergeMessages(prev, [result.customerMessage, ...(result.chatbotMessage ? [result.chatbotMessage] : [])]));
     } catch (err: unknown) {
       toast.error(getApiError(err).message || t.messageFailed);
     }

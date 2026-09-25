@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mixfood.vn/</loc>
+    <loc>https://mix-food.io.vn/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://mixfood.vn/menu</loc>
+    <loc>https://mix-food.io.vn/menu</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://mixfood.vn/booking</loc>
+    <loc>https://mix-food.io.vn/booking</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

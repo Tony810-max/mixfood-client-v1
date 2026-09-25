@@ -47,9 +47,26 @@ const normalizeName = (name: CategoryName | string): { en: string; vn: string } 
 
 const normalizeTags = (tags: string[] | null): MenuItemTag[] => {
   if (!Array.isArray(tags)) return [];
-  return tags
-    .filter((tag): tag is MenuItemTag => tag === "popular" || tag === "spicy" || tag === "veggie")
-    .slice();
+  const tagAliases: Record<string, MenuItemTag> = {
+    signature: "signature",
+    spicy: "spicy",
+    cay: "spicy",
+    recommended: "recommended",
+    popular: "recommended",
+    vegetarian: "vegetarian",
+    veggie: "vegetarian",
+    chay: "vegetarian",
+    "gluten-free": "gluten-free",
+    "gluten free": "gluten-free",
+    "chef's special": "chefs-special",
+    "chefs special": "chefs-special",
+  };
+
+  return [...new Set(
+    tags
+      .map((tag) => tagAliases[tag.trim().toLowerCase()])
+      .filter((tag): tag is MenuItemTag => Boolean(tag)),
+  )];
 };
 
 const getItemImage = (menuItem: MenuItemResponse): string | null => {

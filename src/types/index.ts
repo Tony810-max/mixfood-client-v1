@@ -98,7 +98,13 @@ export interface MenuItem {
   tags?: MenuItemTag[];
 }
 
-export type MenuItemTag = "spicy" | "veggie" | "popular";
+export type MenuItemTag =
+  | "signature"
+  | "spicy"
+  | "recommended"
+  | "vegetarian"
+  | "gluten-free"
+  | "chefs-special";
 
 export interface Category {
   id: string;

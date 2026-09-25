@@ -4,6 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes typing-wave {
+  0%, 60%, 100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(0.9);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-0.2rem) scale(1);
+  }
+}
+
+.typing-wave-dot {
+  animation: typing-wave 1.2s ease-in-out infinite;
+}
+
 .bg-primary-gradient {
   background: linear-gradient(90deg, hsl(var(--primary-gradient-start)), hsl(var(--primary-gradient-end)));
   @apply text-primary-foreground;
