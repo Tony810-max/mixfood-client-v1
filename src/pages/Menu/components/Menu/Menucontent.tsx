@@ -1,167 +1,105 @@
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { ArrowUpRight, RotateCcw, SearchX, Utensils } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useMenu } from "@/hooks/api/useMenu";
 import { ROUTES } from "@/utils/const";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import restaurantImg from "../../../../assets/restaurant-interior.jpg";
+import heroDish from "@/assets/hero-dish.jpg";
 import CategorySection from "../CategorySection";
-import DropdownCategory from "./DropdownCategory";
 import SearchContent from "./SearchContent";
+
+const normalizeSearch = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().replace(/\s+/g, "");
 
 const MenuContent = () => {
   const { lang, t } = useLanguage();
-  const { data: categories, isLoading, error } = useMenu();
+  const { data: categories, isLoading, error, refetch } = useMenu();
   const [searchParams] = useSearchParams();
-  const requestedQuery = searchParams.get('q') ?? '';
+  const requestedQuery = searchParams.get("q") ?? "";
   const [searchQuery, setSearchQuery] = useState(requestedQuery);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const vn = lang === "vn";
 
   useEffect(() => setSearchQuery(requestedQuery), [requestedQuery]);
 
-  const filteredCategories = categories?.filter((category) => {
-    const matchesCategory = !selectedCategory || selectedCategory === "all" || category.id === selectedCategory;
-    const matchesSearch = !searchQuery || category.items.some((item) => 
-      item.name.en.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.name.vn.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    return matchesCategory && matchesSearch;
-  }).map((category) => ({
-    ...category,
-    items: category.items.filter((item) => 
-      !searchQuery || 
-      item.name.en.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.name.vn.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter((category) => category.items.length > 0);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-6 py-8">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-              <p className="mt-4 text-muted-foreground">
-                {t.menuLoading}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-6 py-8">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <p className="text-destructive mb-4">
-                {t.menuLoadError}
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="text-primary hover:underline"
-              >
-                {t.menuRetry}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const query = normalizeSearch(searchQuery);
+  const filteredCategories = (categories ?? [])
+    .filter((category) => !selectedCategory || category.id === selectedCategory)
+    .map((category) => ({
+      ...category,
+      items: category.items.filter((item) => !query || normalizeSearch(item.name.en).includes(query) || normalizeSearch(item.name.vn).includes(query)),
+    }))
+    .filter((category) => category.items.length > 0);
+  const count = filteredCategories.reduce((total, category) => total + category.items.length, 0);
+  const clearFilters = () => { setSearchQuery(""); setSelectedCategory(null); };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <main className="pt-20">
+        <section className="overflow-hidden border-b border-border/70 bg-secondary/30">
+          <div className="page-container grid items-center gap-7 py-10 sm:py-14 md:grid-cols-[1fr_auto]">
+            <div className="max-w-2xl">
+              <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary"><Utensils className="h-4 w-4" /> MIX FOOD · THAI KITCHEN</p>
+              <h1 className="font-serif text-4xl font-semibold leading-tight md:text-6xl">{t.menuTitle}<span className="text-primary">.</span></h1>
+              <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground md:text-base">{t.menuSubtitle}</p>
+              <p className="mt-5 text-xs text-muted-foreground">{vn ? "Chạm vào món ăn để xem ảnh và mô tả chi tiết." : "Tap a dish to see the photo and full description."}</p>
+            </div>
+            <img src={heroDish} alt={t.heroTomYum} className="hidden h-48 w-48 rotate-3 rounded-[3.5rem_1rem_3.5rem_1rem] object-cover shadow-layered md:block lg:h-56 lg:w-56" />
+          </div>
+        </section>
 
-      {/* Hero */}
-      <main>
-      <section className="pt-[4.5rem]">
-        <div className="relative h-[240px] md:h-[280px] lg:h-[360px] overflow-hidden">
-          <img
-            src={restaurantImg}
-            alt="Mix Food Restaurant"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent" />
-          <div className="absolute inset-0 flex items-end -translate-y-1/2 top-1/2">
-            <div className="container mx-auto px-4 md:px-6">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-background mb-2 md:mb-3"
-              >
-                {t.menuTitle}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-body text-background/70 text-base md:text-lg "
-              >
-                {t.menuSubtitle}
-              </motion.p>
+        <div className="sticky top-20 z-30 border-b border-border/70 bg-background/95 backdrop-blur-md">
+          <div className="page-container py-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p aria-live="polite" className="text-xs text-muted-foreground">{isLoading ? t.menuLoading : error ? t.menuLoadError : <><span className="font-semibold text-foreground">{count}</span> {vn ? "món ăn dành cho bạn" : "dishes to discover"}</>}</p>
+              <div className="w-full sm:max-w-sm"><SearchContent value={searchQuery} onSearchChange={setSearchQuery} /></div>
+            </div>
+            <div className="no-scrollbar mt-3 flex gap-2 overflow-x-auto pb-1" role="group" aria-label={vn ? "Danh mục món ăn" : "Dish categories"}>
+              <button type="button" aria-pressed={!selectedCategory} onClick={() => setSelectedCategory(null)} className={"min-h-10 shrink-0 rounded-full border px-4 text-xs font-semibold transition-colors " + (!selectedCategory ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/50")}>{vn ? "Tất cả món" : "All dishes"}</button>
+              {categories?.map((category) => (
+                <button key={category.id} type="button" aria-pressed={selectedCategory === category.id} onClick={() => setSelectedCategory(category.id)} className={"min-h-10 shrink-0 rounded-full border px-4 text-xs font-semibold transition-colors " + (selectedCategory === category.id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/50")}>
+                  {category[lang] || category.en || category.vn}
+                </button>
+              ))}
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Search and Filter */}
-      <div className="sticky top-[80px] z-30 border-y border-border/70 bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row md:px-6">
-          <SearchContent value={searchQuery} onSearchChange={setSearchQuery} />
-          <DropdownCategory onSelectCategory={setSelectedCategory} />
+        <div className="page-container space-y-12 py-8 md:space-y-16 md:py-12">
+          {isLoading ? (
+            <div role="status" aria-label={t.menuLoading} className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4">
+              {Array.from({ length: 8 }, (_, index) => <div key={index} aria-hidden="true" className="overflow-hidden rounded-2xl border border-border/70 bg-card"><div className="aspect-[4/3] animate-pulse bg-secondary" /><div className="p-5"><div className="h-4 w-3/4 animate-pulse rounded bg-secondary" /></div></div>)}
+              <span className="sr-only">{t.menuLoading}</span>
+            </div>
+          ) : error ? (
+            <div role="alert" className="rounded-3xl border border-border bg-card px-5 py-16 text-center">
+              <p className="text-muted-foreground">{t.menuLoadError}</p>
+              <button type="button" onClick={() => void refetch()} className="mx-auto mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground"><RotateCcw className="h-4 w-4" />{t.menuRetry}</button>
+            </div>
+          ) : filteredCategories.length ? (
+            filteredCategories.map((category) => <CategorySection key={category.id + ":" + query} category={category} lang={lang} />)
+          ) : (
+            <div className="rounded-3xl border border-dashed border-border px-5 py-16 text-center">
+              <SearchX aria-hidden="true" className="mx-auto mb-4 h-9 w-9 text-muted-foreground" />
+              <p className="font-serif text-xl">{t.menuNoDishes}</p>
+              <button type="button" onClick={clearFilters} className="mt-4 min-h-11 text-sm font-semibold text-primary underline underline-offset-4">{vn ? "Xóa bộ lọc và tìm lại" : "Clear filters and start again"}</button>
+            </div>
+          )}
         </div>
-      </div>
 
-      {/* Category Sections */}
-      <div className="container mx-auto px-4 md:px-6 py-8 space-y-16 md:space-y-20">
-        {filteredCategories?.map((category) => (
-          <CategorySection key={category.id} category={category} lang={lang} />
-        ))}
-        {filteredCategories?.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              {t.menuNoDishes}
-            </p>
+        <section className="page-container pb-12 md:pb-20">
+          <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-[#30251f] p-7 text-[#fff8ee] sm:flex-row sm:items-center md:p-10">
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#eabda4]">MIX FOOD · DA NANG</p>
+              <h2 className="font-serif text-2xl font-semibold md:text-3xl">{t.menuReadyToDine}</h2>
+              <p className="mt-3 max-w-lg text-sm leading-6 text-[#e4d4c8]">{t.menuReadyToDineDesc}</p>
+            </div>
+            <Link to={ROUTES.BOOKING} className="inline-flex min-h-12 shrink-0 items-center gap-3 rounded-full bg-[#fff8ee] px-6 text-sm font-semibold text-[#30251f] transition-colors hover:bg-white">{t.reserveTable}<ArrowUpRight className="h-4 w-4" /></Link>
           </div>
-        )}
-      </div>
-
-      {/* CTA */}
-      <section className="container mx-auto px-4 md:px-6 pb-12 md:pb-16">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="rounded-2xl bg-gradient-to-br from-primary/10 via-accent/5 to-background p-6 md:p-10 lg:p-14 text-center"
-        >
-          <h2 className="font-serif text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-3 md:mb-4">
-            {t.menuReadyToDine}
-          </h2>
-          <p className="text-muted-foreground mb-6 md:mb-8 max-w-md mx-auto text-sm md:text-base">
-            {t.menuReadyToDineDesc}
-          </p>
-          <Link
-            to={ROUTES.BOOKING}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-primary-gradient px-8 py-3.5 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl md:text-base"
-          >
-            {t.reserveTable}
-          </Link>
-        </motion.div>
-      </section>
+        </section>
       </main>
-
       <Footer />
     </div>
   );

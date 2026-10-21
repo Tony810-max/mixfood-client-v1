@@ -20,6 +20,7 @@ interface ProductImageResponse {
 interface MenuItemResponse {
   id: number;
   name: CategoryName | string;
+  description?: CategoryName | string | null;
   price: number;
   image: string | null;
   tags: string[] | null;
@@ -81,6 +82,7 @@ const getItemImage = (menuItem: MenuItemResponse): string | null => {
 const transformMenuItem = (menuItem: MenuItemResponse): MenuItem => ({
   id: menuItem.id,
   name: normalizeName(menuItem.name),
+  description: menuItem.description ? normalizeName(menuItem.description) : undefined,
   price: menuItem.price,
   image: getItemImage(menuItem),
   tags: normalizeTags(menuItem.tags),

@@ -93,6 +93,11 @@ export interface MenuItem {
     en: string;
     vn: string;
   };
+  /** Optional product copy supplied by the menu API. */
+  description?: {
+    en: string;
+    vn: string;
+  };
   price: number;
   image: string | null;
   tags?: MenuItemTag[];

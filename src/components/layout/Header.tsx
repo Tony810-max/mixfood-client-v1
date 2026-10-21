@@ -47,10 +47,10 @@ const Header = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-        className={`fixed top-0 left-0 right-0 z-40 pt-safe-top transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 pt-[env(safe-area-inset-top)] transition-all duration-300 ${
           scrolled
             ? "backdrop-blur-md bg-card/80 shadow-layered"
-            : "bg-transparent"
+            : "border-b border-border/50 bg-background/95"
         }`}
       >
         <div className="page-container flex h-[80px] items-center justify-between pb-2">

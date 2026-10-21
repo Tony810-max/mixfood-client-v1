@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import MenuItemCard from "./Menu";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12;
 
 const CategorySection = ({
   category,
@@ -17,20 +17,21 @@ const CategorySection = ({
   const [currentPage, setCurrentPage] = useState(1);
   
   const totalPages = Math.ceil(category.items.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const activePage = Math.min(currentPage, Math.max(totalPages, 1));
+  const startIndex = (activePage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentItems = category.items.slice(startIndex, endIndex);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById(category.id)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (
     <section
       id={category.id}
       data-id={category.id}
-      className="scroll-mt-[200px] min-h-[18.75rem]"
+      className="min-h-[18.75rem] scroll-mt-[260px] sm:scroll-mt-[220px]"
     >
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -39,26 +40,32 @@ const CategorySection = ({
         transition={{ duration: 0.5 }}
         className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8"
       >
-        <h2 className="font-serif text-xl md:text-2xl lg:text-3xl font-bold text-foreground whitespace-nowrap">
-          {lang === "vn" ? category.vn : category.en}
+        <h2 className="min-w-0 font-serif text-xl font-semibold text-foreground md:text-2xl lg:text-3xl">
+          {category[lang] || category.en || category.vn}
         </h2>
         <div className="h-px flex-1 bg-border" />
         <span className="text-xs md:text-sm text-muted-foreground tabular-nums shrink-0">
           {category.items.length} {t.menuItems}
         </span>
       </motion.div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:gap-5 xl:grid-cols-4 xl:gap-6">
         {currentItems.map((item, i) => (
-          <MenuItemCard key={item.id} item={item} lang={lang} index={i} />
+          <MenuItemCard
+            key={item.id}
+            item={item}
+            lang={lang}
+            index={i}
+            categoryName={category[lang] || category.en || category.vn}
+          />
         ))}
       </div>
       
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-10">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label={lang === "vn" ? "Phân trang món ăn" : "Dish pages"}>
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-secondary/80 transition-colors"
+            onClick={() => handlePageChange(activePage - 1)}
+            disabled={activePage === 1}
+            className="min-h-11 rounded-lg bg-secondary px-4 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t.menuPrevious}
           </button>
@@ -67,9 +74,10 @@ const CategorySection = ({
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`h-9 w-9 rounded-lg text-sm font-medium transition-colors ${
-                currentPage === page
-                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm"
+              aria-current={activePage === page ? "page" : undefined}
+              className={`h-11 w-11 rounded-lg text-sm font-medium transition-colors ${
+                activePage === page
+                  ? "bg-primary text-white shadow-sm"
                   : "bg-secondary text-foreground hover:bg-secondary/80"
               }`}
             >
@@ -78,9 +86,9 @@ const CategorySection = ({
           ))}
 
           <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-secondary/80 transition-colors"
+            onClick={() => handlePageChange(activePage + 1)}
+            disabled={activePage === totalPages}
+            className="min-h-11 rounded-lg bg-secondary px-4 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t.menuNext}
           </button>
