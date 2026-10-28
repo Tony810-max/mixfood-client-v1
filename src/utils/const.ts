@@ -10,6 +10,7 @@ export const ROUTES = {
   CONTACT: "/#location",
   PRIVACY: "/privacy",
   TERMS: "/terms",
+  CAREERS: "/careers",
   MENU_ITEMS: {
     TOM_YUM: "/menu?q=Tom%20Yum",
     PAD_THAI: "/menu?q=Pad%20Thai",

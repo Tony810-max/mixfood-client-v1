@@ -9,7 +9,7 @@ import MobileNav from "./Header/MobileNav";
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -39,6 +39,7 @@ const Header = () => {
   const navItems = [
     { label: t.home, href: ROUTES.HOME },
     { label: t.menu, href: ROUTES.MENU },
+    { label: lang === "vn" ? "Tuyển dụng" : "Careers", href: ROUTES.CAREERS },
   ];
 
   return (

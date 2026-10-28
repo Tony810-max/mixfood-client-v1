@@ -1,7 +1,7 @@
 import heroDish from "@/assets/hero-dish.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { INFORMATION_RESTAURANT, ROUTES } from "@/utils/const";
-import { ArrowDown, ArrowUpRight, Clock3, MapPin } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Clock3, MapPin, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
@@ -9,8 +9,8 @@ const Hero = () => {
   const vn = lang === "vn";
 
   return (
-    <section id="home" className="relative overflow-hidden pt-24 md:pt-28">
-      <div className="page-container pb-10 pt-6 md:pb-16 md:pt-10">
+    <section id="home" className="relative overflow-hidden bg-[radial-gradient(circle_at_90%_15%,hsl(var(--primary)/.10),transparent_28%),radial-gradient(circle_at_12%_85%,hsl(var(--secondary)/.7),transparent_34%)] pt-24 md:pt-28">
+      <div className="page-container flex min-h-[31rem] items-center pb-10 pt-6 md:min-h-[35rem] md:pb-16 md:pt-10">
         <div className="grid items-center gap-9 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-xl py-3 lg:py-10">
             <p className="mb-5 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary sm:text-xs">
@@ -32,13 +32,14 @@ const Hero = () => {
               <span className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-primary" />{INFORMATION_RESTAURANT.openHours}</span>
             </div>
           </div>
-          <figure className="relative isolate mx-auto aspect-[4/3] w-full min-w-0 max-w-xl overflow-hidden rounded-3xl bg-secondary shadow-layered sm:rounded-[2rem]">
+          <figure className="relative isolate mx-auto aspect-[4/3] w-full min-w-0 max-w-xl overflow-hidden rounded-3xl bg-secondary shadow-layered ring-1 ring-foreground/5 sm:rounded-[2rem]">
             <img src={heroDish} alt={t.heroTomYum} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
             <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
             <figcaption className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-8">
               <p className="mb-2 text-[10px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-white/80 sm:text-xs">{vn ? "Khám phá hương vị" : "Discover the flavour"}</p>
               <p className="font-serif text-xl font-semibold leading-snug sm:text-2xl"><span className="inline-block">Tom Yum</span>{" · "}<span className="inline-block">Pad Thai</span>{" · "}<span className="inline-block">Som Tam</span></p>
             </figcaption>
+            <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm"><Sparkles className="size-3" /> Thai kitchen</span>
           </figure>
         </div>
       </div>

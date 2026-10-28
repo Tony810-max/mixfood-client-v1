@@ -76,7 +76,8 @@ export default function SupportChatbot() {
     setInput('');
   };
 
-  return <div className="fixed bottom-5 right-5 z-50">
+  // Keep the launcher clear of the footer's legal/navigation row on short screens.
+  return <div className="fixed bottom-24 right-5 z-50 sm:right-6">
     {open && <section className="mb-3 flex h-[28rem] w-80 flex-col rounded-2xl border bg-card shadow-2xl" aria-label="Trợ lý Mix Food">
       <header className="flex items-center justify-between border-b px-4 py-3"><b className="flex items-center gap-2"><Bot className="text-primary" />{mode === 'BOT' ? 'Trợ lý Mix Food' : lang === 'vn' ? 'Nhân viên hỗ trợ' : 'Staff support'}</b><button onClick={() => setOpen(false)} aria-label="Đóng"><X className="size-4" /></button></header>
       <div className="flex-1 space-y-2 overflow-y-auto p-3">{messages.map((message) => <div key={message.id} className={`flex ${message.sender === 'USER' ? 'justify-end' : 'justify-start'}`}><p className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${message.sender === 'USER' ? 'bg-primary-gradient text-primary-foreground' : 'bg-muted text-foreground'}`}>{message.text}</p></div>)}{botTyping && <TypingIndicator staff={false} />}{staffTyping && <TypingIndicator staff />}</div>

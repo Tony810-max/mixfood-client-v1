@@ -17,7 +17,8 @@ export const MENU_TAG_PRESENTATIONS: Record<MenuItemTag, MenuTagPresentation> = 
   spicy: {
     icon: Flame,
     label: { en: 'Spicy', vn: 'Cay' },
-    className: 'border border-[#8f302c] bg-[#3a201f] text-[#fecaca]',
+    // A warm amber reads as a food/spice cue without looking like an error state.
+    className: 'border border-amber-500/45 bg-amber-50 text-amber-900 dark:bg-amber-950/45 dark:text-amber-100',
   },
   recommended: {
     icon: BadgeCheck,

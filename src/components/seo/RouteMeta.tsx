@@ -52,7 +52,7 @@ export default function RouteMeta() {
     document.title = title;
     document.documentElement.lang = SITE.language;
     upsertMeta('meta[name="description"]', 'name', 'description', description);
-    upsertMeta('meta[name="keywords"]', 'name', 'keywords', SITE.keywords.join(', '));
+    upsertMeta('meta[name="keywords"]', 'name', 'keywords', [...SITE.keywords, ...(page?.keywords ?? [])].join(', '));
     upsertMeta('meta[name="robots"]', 'name', 'robots', robots);
     upsertMeta('meta[name="googlebot"]', 'name', 'googlebot', robots);
     upsertMeta('meta[property="og:site_name"]', 'property', 'og:site_name', SITE.name);

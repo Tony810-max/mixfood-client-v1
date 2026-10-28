@@ -24,6 +24,7 @@ const Index = lazy(() => import("./pages/Index.tsx"));
 const MenuPage = lazy(() => import("./pages/Menu/index.tsx"));
 const Booking = lazy(() => import("./pages/Booking/index.tsx"));
 const BookingSuccess = lazy(() => import("./pages/BookingSuccess/index.tsx"));
+const CareersPage = lazy(() => import("./pages/Careers/index.tsx"));
 const LoginPage = lazy(() => import("./pages/Auth/Login/index.tsx"));
 const RegisterPage = lazy(() => import("./pages/Auth/Register/index.tsx"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgotPassword/index.tsx"));
@@ -113,6 +114,8 @@ const App = () => (
                     <Route path={ROUTES.MENU} element={<MenuPage />} />
                     <Route path={ROUTES.BOOKING} element={<Booking />} />
                     <Route path={ROUTES.BOOKING_SUCCESS} element={<BookingSuccess />} />
+                    <Route path={ROUTES.CAREERS} element={<CareersPage />} />
+                    <Route path="/tuyen-dung" element={<Navigate to={ROUTES.CAREERS} replace />} />
                     <Route
                       path={ROUTES.PROFILE}
                       element={<ProtectedRoute requireAuth><ProfilePage /></ProtectedRoute>}

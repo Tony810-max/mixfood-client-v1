@@ -30,6 +30,7 @@ export type PublicPageMetadata = {
   title: string;
   description: string;
   breadcrumbName?: string;
+  keywords?: string[];
 };
 
 export const PUBLIC_PAGE_METADATA: Record<string, PublicPageMetadata> = {
@@ -46,6 +47,21 @@ export const PUBLIC_PAGE_METADATA: Record<string, PublicPageMetadata> = {
     title: 'Đặt bàn nhà hàng Thái tại Đà Nẵng | Mix Food',
     description: 'Đặt bàn tại Mix Food Đà Nẵng nhanh chóng để thưởng thức ẩm thực Thái chuẩn vị. Chọn thời gian phù hợp và gửi yêu cầu trực tuyến.',
     breadcrumbName: 'Đặt bàn',
+  },
+  '/careers': {
+    title: 'Tuyển dụng nhân viên part-time tại Đà Nẵng | Mix Food',
+    description: 'Mix Food tuyển dụng tại Đà Nẵng: nhân viên phục vụ part-time/full-time, phụ bếp và giữ xe. Xem vị trí đang tuyển, số lượng và ứng tuyển trực tuyến.',
+    breadcrumbName: 'Tuyển dụng Mix Food',
+    keywords: [
+      'tuyển dụng Đà Nẵng',
+      'việc làm part time Đà Nẵng',
+      'việc làm bán thời gian Đà Nẵng',
+      'tuyển nhân viên phục vụ Đà Nẵng',
+      'tuyển phụ bếp Đà Nẵng',
+      'tuyển nhân viên giữ xe Đà Nẵng',
+      'việc làm nhà hàng Đà Nẵng',
+      'Mix Food tuyển dụng',
+    ],
   },
 };
 
