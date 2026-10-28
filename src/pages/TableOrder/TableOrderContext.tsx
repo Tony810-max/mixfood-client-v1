@@ -1,3 +1,5 @@
+
+import { translateUi } from '@/lib/localization';
 /**
  * TableOrderContext
  *
@@ -186,11 +188,11 @@ export function TableOrderProvider({
         } catch {
           setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status } : o)));
         }
-        toast.info(t.orderUpdated);
+        toast.info(translateUi(t.orderUpdated));
         return;
       }
       if (status === 'CANCELLED') {
-        toast.info(t.orderUpdated);
+        toast.info(translateUi(t.orderUpdated));
       }
       setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status } : o)));
     });
@@ -289,7 +291,7 @@ export function TableOrderProvider({
         clearSession();
         onSessionEnded();
       } else {
-        toast.error(message || t.orderFailed);
+        toast.error(translateUi(message || t.orderFailed));
       }
     }
     setSubmitting(false);
@@ -302,9 +304,9 @@ export function TableOrderProvider({
     try {
       await cancelOrderRequest(sessionToken, orderId);
       setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: 'CANCELLED' } : o)));
-      toast.success(t.orderCancelledSuccess);
+      toast.success(translateUi(t.orderCancelledSuccess));
     } catch (err: unknown) {
-      toast.error(getApiError(err).message || t.orderCancelFailed);
+      toast.error(translateUi(getApiError(err).message || t.orderCancelFailed));
     }
   };
 
@@ -323,7 +325,7 @@ export function TableOrderProvider({
       }
       setMessages((prev) => mergeMessages(prev, [result.customerMessage, ...(result.chatbotMessage ? [result.chatbotMessage] : [])]));
     } catch (err: unknown) {
-      toast.error(getApiError(err).message || t.messageFailed);
+      toast.error(translateUi(getApiError(err).message || t.messageFailed));
     }
   };
 
@@ -339,19 +341,19 @@ export function TableOrderProvider({
         call,
       ]);
       toast.success(
-        call.isReminder
+        translateUi(call.isReminder
           ? t.staffReminder
-          : t.staffNotified,
+          : t.staffNotified),
       );
     } catch (err: unknown) {
       const { code, message, retryAfterSeconds } = getApiError(err);
       if (code === 'STAFF_CALL_COOLDOWN') {
         toast.info(
-          message ||
-            t.staffCooldown.replace('{seconds}', String(retryAfterSeconds ?? 30)),
+          translateUi(message ||
+            t.staffCooldown.replace('{seconds}', String(retryAfterSeconds ?? 30))),
         );
       } else {
-        toast.error(message || t.staffCallFailed);
+        toast.error(translateUi(message || t.staffCallFailed));
       }
     } finally {
       staffCallInFlightRef.current.delete(type);
@@ -373,13 +375,13 @@ export function TableOrderProvider({
     } catch (err: unknown) {
       const { code, message } = getApiError(err);
       if (code === 'NO_ORDERS') {
-        toast.error(t.noOrdersForPayment);
+        toast.error(translateUi(t.noOrdersForPayment));
       } else if (code === 'SESSION_NOT_ACTIVE') {
         setSessionEnded(true);
         clearSession();
         onSessionEnded();
       } else {
-        toast.error(message || t.paymentRequestFailed);
+        toast.error(translateUi(message || t.paymentRequestFailed));
       }
     }
     setRequestingPayment(false);

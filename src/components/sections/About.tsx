@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import interiorImg from "@/assets/restaurant-interior.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
@@ -6,6 +8,7 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@/utils/const";
 
 const About = () => {
+  const ui = useUiText();
   const { lang, t } = useLanguage();
 
   return (
@@ -21,7 +24,7 @@ const About = () => {
           >
             <img
               src={interiorImg}
-              alt="Mix Food restaurant interior"
+              alt={ui("Mix Food restaurant interior")}
               loading="lazy"
               className="aspect-[4/3] w-full rounded-[2rem_5rem_2rem_2rem] object-cover shadow-layered"
             />

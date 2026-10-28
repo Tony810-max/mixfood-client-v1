@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Info } from "lucide-react";
@@ -14,13 +16,14 @@ const MenuItemCard = ({ item, lang, index, categoryName }: {
   index: number;
   categoryName?: string;
 }) => {
+  const ui = useUiText();
   const [open, setOpen] = useState(false);
   const reducedMotion = useReducedMotion();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const itemName = item.name[lang] || item.name.en || item.name.vn;
   const description = item.description?.[lang]?.trim()
     || item.description?.[lang === "vn" ? "en" : "vn"]?.trim();
-  const detailsLabel = lang === "vn" ? "Xem chi tiết" : "View details";
+  const detailsLabel = lang === "vn" ? ui("Xem chi tiết") : "View details";
 
   return (
     <>

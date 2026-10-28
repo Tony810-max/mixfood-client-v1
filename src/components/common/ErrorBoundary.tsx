@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { translateUi } from '@/lib/localization';
 
 interface Props {
   children: ReactNode;
@@ -29,16 +30,16 @@ class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-screen flex items-center justify-center bg-red-50 dark:bg-red-900/20">
           <div className="text-center p-8">
             <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
-              Something went wrong
+              {translateUi('Something went wrong')}
             </h1>
             <p className="text-red-700 dark:text-red-300 mb-4">
-              {this.state.error?.message || 'An unexpected error occurred'}
+              {translateUi('An unexpected error occurred')}
             </p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
             >
-              Reload Page
+              {translateUi('Reload Page')}
             </button>
           </div>
         </div>

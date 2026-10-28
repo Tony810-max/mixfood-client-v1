@@ -1,3 +1,4 @@
+import { translateUi } from '@/lib/localization';
 import { API_CONFIG, ERROR_MESSAGES } from "@/constants";
 import { ApiError, ApiRequestOptions } from "@/types";
 
@@ -80,7 +81,7 @@ export async function apiRequest<T>(
   return responseBody as T;
 }
 
-export const getApiErrorMessage = (error: unknown): string => {
+const rawApiErrorMessage = (error: unknown): string => {
   if (error instanceof ApiError) {
     return error.message;
   }
@@ -104,3 +105,5 @@ export const getApiErrorMessage = (error: unknown): string => {
 
   return ERROR_MESSAGES.GENERIC_ERROR;
 };
+
+export function getApiErrorMessage(error: unknown): string { return translateUi(rawApiErrorMessage(error)); }

@@ -1,3 +1,7 @@
+
+import { translateUi } from '@/lib/localization';
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -28,6 +32,7 @@ const statusAppearance = (status: string) => ({
 }[status] ?? { className: 'border-border bg-muted text-muted-foreground', icon: Clock3 });
 
 export function ReservationHistoryTable({ reservations, isLoading, stats, onRefresh, onCancel, isCancelling, labels }: ReservationHistoryTableProps) {
+  const ui = useUiText();
   const [status, setStatus] = useState('ALL');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('date-desc');
@@ -42,7 +47,7 @@ export function ReservationHistoryTable({ reservations, isLoading, stats, onRefr
     }), [reservations, search, sort, status]);
   const statusLabel = (value: string) => ({ PENDING: labels.pending, CONFIRMED: labels.confirmed, ARRIVED: labels.arrived, CANCELLED: labels.cancelled }[value] ?? value);
   const isAutomaticallyCancelled = (reservation: Reservation) =>
-    reservation.cancelledBy?.name === 'System' || reservation.rejectionReason?.startsWith('Automatically cancelled:');
+    reservation.cancelledBy?.name === ui("System") || reservation.rejectionReason?.startsWith(ui("Automatically cancelled:"));
   const cancellationReason = (reservation: Reservation) =>
     isAutomaticallyCancelled(reservation) ? labels.automaticCancellationReason : reservation.rejectionReason;
   const cancelledByLabel = (reservation: Reservation) => {
@@ -53,9 +58,9 @@ export function ReservationHistoryTable({ reservations, isLoading, stats, onRefr
   const handleRefresh = async () => {
     try {
       await onRefresh();
-      toast.success(labels.refreshSuccess, { duration: 2000 });
+      toast.success(translateUi(labels.refreshSuccess), { duration: 2000 });
     } catch {
-      toast.error(labels.refreshError, { duration: 2000 });
+      toast.error(translateUi(labels.refreshError), { duration: 2000 });
     }
   };
 

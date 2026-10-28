@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import ReserveButton from "@/components/navigation/ReserveButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { INFORMATION_RESTAURANT } from "@/utils/const";
@@ -5,6 +7,7 @@ import { motion } from "framer-motion";
 import { Clock, MapPin, Phone } from "lucide-react";
 
 const Location = () => {
+  const ui = useUiText();
   const { lang, t } = useLanguage();
 
   return (
@@ -38,7 +41,7 @@ const Location = () => {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Mix Food Da Nang location"
+              title={ui("Mix Food Da Nang location")}
             />
           </motion.div>
 
@@ -56,7 +59,7 @@ const Location = () => {
               </div>
               <div>
                 <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
-                  {lang === "vn" ? "Địa Chỉ" : "Address"}
+                  {lang === "vn" ? ui("Địa Chỉ") : ui("Address")}
                 </h3>
                 <p className="text-muted-foreground">{INFORMATION_RESTAURANT.address}</p>
               </div>
@@ -80,7 +83,7 @@ const Location = () => {
               </div>
               <div>
                 <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
-                  {lang === "vn" ? "Điện Thoại" : "Phone"}
+                  {lang === "vn" ? ui("Điện Thoại") : ui("Phone")}
                 </h3>
                 <p className="text-muted-foreground">{INFORMATION_RESTAURANT.phone}</p>
               </div>

@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
@@ -6,6 +8,7 @@ interface AuthLogoProps {
 }
 
 export const AuthLogo = ({ icon }: AuthLogoProps) => {
+  const ui = useUiText();
   return (
     <motion.div
       initial={{ scale: 0, rotate: -180 }}
@@ -18,7 +21,7 @@ export const AuthLogo = ({ icon }: AuthLogoProps) => {
         {icon || (
           <img 
             src="/favicon.jpg" 
-            alt="Mix Food Logo" 
+            alt={ui("Mix Food Logo")}
             className="w-full h-full rounded-full object-cover"
           />
         )}

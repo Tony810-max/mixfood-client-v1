@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 import { ExternalLink, Star } from "lucide-react";
@@ -18,7 +20,7 @@ const reviews = [
     time: "8 tuần trước",
     rating: 5,
     en: "Really good food from Mix Food Am Thuc Thai! Everything was tasty and full of flavour. I really enjoyed the meal and would definitely recommend giving them a try. I’ll be ordering again from them!",
-    vn: "Really good food from Mix Food Am Thuc Thai! Everything was tasty and full of flavour. I really enjoyed the meal and would definitely recommend giving them a try. I’ll be ordering again from them!",
+    vn: "Đồ ăn ở Mix Food Ẩm Thực Thái rất ngon! Món nào cũng đậm đà. Tôi rất thích bữa ăn này và sẽ giới thiệu mọi người đến thử. Tôi nhất định sẽ đặt lại!",
     details: "Giao tận nơi · Bữa tối · 100–200 N ₫",
   },
   {
@@ -33,6 +35,7 @@ const reviews = [
 ];
 
 const Reviews = () => {
+  const ui = useUiText();
   const { lang, t } = useLanguage();
 
   return (
@@ -61,11 +64,11 @@ const Reviews = () => {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="font-semibold text-sm text-foreground">{review.name} <ExternalLink className="ml-0.5 inline size-3 text-primary" /></p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{review.meta}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{ui(review.meta)}</p>
                 </div>
-                <span className="shrink-0 text-xs text-muted-foreground">{review.time}</span>
+                <span className="shrink-0 text-xs text-muted-foreground">{ui(review.time)}</span>
               </div>
-              <div className="flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
+              <div className="flex gap-1" aria-label={ui('{rating} out of 5 stars', { rating: review.rating })}>
                 {Array.from({ length: review.rating }).map((_, j) => (
                   <Star key={j} size={16} className="fill-primary text-primary" />
                 ))}
@@ -73,11 +76,11 @@ const Reviews = () => {
               <p className="text-foreground/80 text-sm leading-relaxed">
                 {lang === "vn" ? review.vn : review.en}
               </p>
-              <p className="border-t border-border/70 pt-3 text-xs font-medium text-muted-foreground">{review.details}</p>
+              <p className="border-t border-border/70 pt-3 text-xs font-medium text-muted-foreground">{ui(review.details)}</p>
             </motion.div>
           ))}
         </div>
-        <p className="mt-6 text-center text-xs text-muted-foreground">Nguồn đánh giá: Google Maps.</p>
+        <p className="mt-6 text-center text-xs text-muted-foreground">{ui("Nguồn đánh giá: Google Maps.") }</p>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import { getUiLocale } from '@/lib/localization';
 // ─── Shared helpers for TableOrder pages ──────────────────────────────────────
 
 export const API_BASE =
@@ -6,7 +7,7 @@ export const API_BASE =
   'http://localhost:3001';
 
 export function formatVND(n: number) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(n);
+  return new Intl.NumberFormat(getUiLocale(), { style: 'currency', currency: 'VND' }).format(n);
 }
 
 export function generateIdempotencyKey() {

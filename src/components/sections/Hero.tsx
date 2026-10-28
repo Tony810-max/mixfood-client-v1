@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import heroDish from "@/assets/hero-dish.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { INFORMATION_RESTAURANT, ROUTES } from "@/utils/const";
@@ -5,6 +7,7 @@ import { ArrowDown, ArrowUpRight, Clock3, MapPin, Sparkles } from "lucide-react"
 import { Link } from "react-router-dom";
 
 const Hero = () => {
+  const ui = useUiText();
   const { lang, t } = useLanguage();
   const vn = lang === "vn";
 
@@ -37,9 +40,9 @@ const Hero = () => {
             <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
             <figcaption className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-8">
               <p className="mb-2 text-[10px] font-semibold uppercase leading-relaxed tracking-[0.18em] text-white/80 sm:text-xs">{vn ? "Khám phá hương vị" : "Discover the flavour"}</p>
-              <p className="font-serif text-xl font-semibold leading-snug sm:text-2xl"><span className="inline-block">Tom Yum</span>{" · "}<span className="inline-block">Pad Thai</span>{" · "}<span className="inline-block">Som Tam</span></p>
+              <p className="font-serif text-xl font-semibold leading-snug sm:text-2xl"><span className="inline-block">Tom Yum</span>{" · "}<span className="inline-block">{ui("Pad Thai") }</span>{" · "}<span className="inline-block">{ui("Som Tam") }</span></p>
             </figcaption>
-            <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm"><Sparkles className="size-3" /> Thai kitchen</span>
+            <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm"><Sparkles className="size-3" /> {ui("Thai kitchen") }</span>
           </figure>
         </div>
       </div>

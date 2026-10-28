@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import * as React from "react";
 import { Minus, Plus } from "lucide-react";
 
@@ -21,6 +23,7 @@ export interface QuantityStepperProps {
  */
 export const QuantityStepper = React.forwardRef<HTMLDivElement, QuantityStepperProps>(
   ({ value, onChange, min = 0, max = 99, disabled, className, size = "default" }, ref) => {
+  const ui = useUiText();
     const dec = () => onChange(Math.max(min, value - 1));
     const inc = () => onChange(Math.min(max, value + 1));
     const height = size === "sm" ? "h-9" : "h-10";
@@ -31,7 +34,7 @@ export const QuantityStepper = React.forwardRef<HTMLDivElement, QuantityStepperP
       <div
         ref={ref}
         role="group"
-        aria-label="Số lượng"
+        aria-label={ui("Số lượng")}
         className={cn(
           "inline-flex items-center rounded-full border border-border bg-card overflow-hidden",
           height,
@@ -42,7 +45,7 @@ export const QuantityStepper = React.forwardRef<HTMLDivElement, QuantityStepperP
           type="button"
           onClick={dec}
           disabled={disabled || value <= min}
-          aria-label="Giảm số lượng"
+          aria-label={ui("Giảm số lượng")}
           className={cn(
             "flex h-full shrink-0 items-center justify-center text-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:pointer-events-none",
             buttonWidth,
@@ -57,7 +60,7 @@ export const QuantityStepper = React.forwardRef<HTMLDivElement, QuantityStepperP
           type="button"
           onClick={inc}
           disabled={disabled || value >= max}
-          aria-label="Tăng số lượng"
+          aria-label={ui("Tăng số lượng")}
           className={cn(
             "flex h-full shrink-0 items-center justify-center bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-30 disabled:pointer-events-none",
             buttonWidth,

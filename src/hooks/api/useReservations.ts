@@ -1,3 +1,5 @@
+
+import { translateUi } from '@/lib/localization';
 /**
  * TanStack Query hooks for reservations
  */
@@ -80,7 +82,7 @@ export const useCancelReservation = () => {
       reservationService.cancelReservation(id, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      toast.success(t.reservationCancelSuccess);
+      toast.success(translateUi(t.reservationCancelSuccess));
     },
     onError: (error) => {
       logger.error('Reservation cancellation failed', error);

@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { AuthCard, AuthFormLayout, AuthHeader, AuthLogo } from "@/components/auth";
 import { OTPInput } from "@/components/auth/OTPInput";
 import { StepProgress } from "@/components/auth/StepProgress";
@@ -21,6 +23,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const ui = useUiText();
   const { t } = useLanguage();
   const steps = [
     { id: 1, label: t.registerStep1Label, icon: <User className="w-5 h-5" /> },
@@ -225,7 +228,7 @@ const RegisterPage = () => {
                     type="button"
                     onClick={() => setShowPassword((visible) => !visible)}
                     className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? ui("Hide password") : ui("Show password")}
                     aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -251,7 +254,7 @@ const RegisterPage = () => {
                     type="button"
                     onClick={() => setShowPassword((visible) => !visible)}
                     className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
-                    aria-label={showPassword ? "Hide passwords" : "Show passwords"}
+                    aria-label={showPassword ? ui("Hide passwords") : ui("Show passwords")}
                     aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

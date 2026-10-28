@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowUpRight, RotateCcw, SearchX, Utensils } from "lucide-react";
@@ -13,6 +15,7 @@ import SearchContent from "./SearchContent";
 const normalizeSearch = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().replace(/\s+/g, "");
 
 const MenuContent = () => {
+  const ui = useUiText();
   const { lang, t } = useLanguage();
   const { data: categories, isLoading, error, refetch } = useMenu();
   const [searchParams] = useSearchParams();
@@ -41,7 +44,7 @@ const MenuContent = () => {
         <section className="overflow-hidden border-b border-border/70 bg-secondary/30">
           <div className="page-container grid items-center gap-7 py-10 sm:py-14 md:grid-cols-[1fr_auto]">
             <div className="max-w-2xl">
-              <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary"><Utensils className="h-4 w-4" /> MIX FOOD · THAI KITCHEN</p>
+              <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary"><Utensils className="h-4 w-4" /> {ui("MIX FOOD · THAI KITCHEN") }</p>
               <h1 className="font-serif text-4xl font-semibold leading-tight md:text-6xl">{t.menuTitle}<span className="text-primary">.</span></h1>
               <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground md:text-base">{t.menuSubtitle}</p>
               <p className="mt-5 text-xs text-muted-foreground">{vn ? "Chạm vào món ăn để xem ảnh và mô tả chi tiết." : "Tap a dish to see the photo and full description."}</p>
@@ -92,7 +95,7 @@ const MenuContent = () => {
         <section className="page-container pb-12 md:pb-20">
           <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-[#30251f] p-7 text-[#fff8ee] sm:flex-row sm:items-center md:p-10">
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#eabda4]">MIX FOOD · DA NANG</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#eabda4]">{ui("MIX FOOD · DA NANG") }</p>
               <h2 className="font-serif text-2xl font-semibold md:text-3xl">{t.menuReadyToDine}</h2>
               <p className="mt-3 max-w-lg text-sm leading-6 text-[#e4d4c8]">{t.menuReadyToDineDesc}</p>
             </div>

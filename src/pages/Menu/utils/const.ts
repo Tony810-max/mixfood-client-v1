@@ -1,3 +1,4 @@
+import { getUiLocale } from '@/lib/localization';
 /**
  * Menu utility functions
  * 
@@ -6,7 +7,7 @@
  */
 
 export const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat(getUiLocale(), {
     style: 'currency',
     currency: 'VND',
   }).format(price);

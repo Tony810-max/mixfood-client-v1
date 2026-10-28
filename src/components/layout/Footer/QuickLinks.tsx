@@ -1,15 +1,18 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ROUTES } from "@/utils/const";
 import { FooterLink } from './FooterLink';
 
 const QuickLinks = () => {
+  const ui = useUiText();
   const { t, lang } = useLanguage();
 
   const quickLinks = [
     { label: t.home, href: ROUTES.HOME },
     { label: t.menu, href: ROUTES.MENU },
     { label: t.reserveTable, href: ROUTES.RESERVE },
-    { label: lang === 'vn' ? 'Tuyển dụng' : 'Careers', href: ROUTES.CAREERS },
+    { label: lang === 'vn' ? ui("Tuyển dụng") : 'Careers', href: ROUTES.CAREERS },
     { label: t.footerAboutUs, href: ROUTES.ABOUT },
     { label: t.footerContactUs, href: ROUTES.CONTACT },
   ];

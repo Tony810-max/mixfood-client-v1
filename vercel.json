@@ -1,5 +1,14 @@
 {
+  "redirects": [
+    { "source": "/tuyen-dung", "destination": "/careers", "permanent": true }
+  ],
   "rewrites": [
+    { "source": "/careers", "destination": "/careers/index.html" },
+    { "source": "/careers/nhan-vien-phuc-vu", "destination": "/careers/nhan-vien-phuc-vu/index.html" },
+    { "source": "/careers/nhan-vien-giu-xe", "destination": "/careers/nhan-vien-giu-xe/index.html" },
+    { "source": "/careers/phu-bep", "destination": "/careers/phu-bep/index.html" },
+    { "source": "/menu", "destination": "/menu/index.html" },
+    { "source": "/booking", "destination": "/booking/index.html" },
     {
       "source": "/(.*)",
       "destination": "/index.html"

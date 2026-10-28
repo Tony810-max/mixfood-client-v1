@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ROUTES } from "@/utils/const";
 import { motion } from "framer-motion";
@@ -7,6 +9,7 @@ import DesktopNav from "./Header/DesktopNav";
 import MobileNav from "./Header/MobileNav";
 
 const Header = () => {
+  const ui = useUiText();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { t, lang } = useLanguage();
@@ -39,7 +42,7 @@ const Header = () => {
   const navItems = [
     { label: t.home, href: ROUTES.HOME },
     { label: t.menu, href: ROUTES.MENU },
-    { label: lang === "vn" ? "Tuyển dụng" : "Careers", href: ROUTES.CAREERS },
+    { label: lang === "vn" ? ui("Tuyển dụng") : "Careers", href: ROUTES.CAREERS },
   ];
 
   return (

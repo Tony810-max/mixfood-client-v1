@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import * as React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
@@ -5,14 +7,14 @@ import { cn } from "@/lib/utils";
 import { ButtonProps, buttonVariants } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
+const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => { const ui = useUiText(); return (
   <nav
     role="navigation"
-    aria-label="pagination"
+    aria-label={ui("pagination")}
     className={cn("mx-auto flex w-full justify-center", className)}
     {...props}
   />
-);
+); };
 Pagination.displayName = "Pagination";
 
 const PaginationContent = React.forwardRef<HTMLUListElement, React.ComponentProps<"ul">>(
@@ -69,12 +71,12 @@ const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof Pag
 };
 PaginationNext.displayName = "PaginationNext";
 
-const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<"span">) => (
+const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<"span">) => { const ui = useUiText(); return (
   <span aria-hidden className={cn("flex h-9 w-9 items-center justify-center", className)} {...props}>
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
+    <span className="sr-only">{ui("More pages") }</span>
   </span>
-);
+); };
 PaginationEllipsis.displayName = "PaginationEllipsis";
 
 export {

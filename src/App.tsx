@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { ProtectedRoute } from "@/components/auth";
 import { BlockedUserToast } from "@/components/common/BlockedUserToast";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
@@ -44,14 +46,13 @@ const queryClient = new QueryClient({
   },
 });
 
-const RouteFallback = () => (
+const RouteFallback = () => { const ui = useUiText(); return (
   <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-live="polite">
     <div className="flex items-center gap-3 rounded-full border bg-card px-5 py-3 text-sm text-muted-foreground shadow-layered">
       <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      Đang tải nội dung…
-    </div>
+      {ui("Đang tải nội dung…") } </div>
   </div>
-);
+); };
 
 /** Keep page navigation predictable, including when moving between long menu sections. */
 const ScrollToTop = () => {
@@ -115,6 +116,7 @@ const App = () => (
                     <Route path={ROUTES.BOOKING} element={<Booking />} />
                     <Route path={ROUTES.BOOKING_SUCCESS} element={<BookingSuccess />} />
                     <Route path={ROUTES.CAREERS} element={<CareersPage />} />
+                    <Route path="/careers/:slug" element={<CareersPage />} />
                     <Route path="/tuyen-dung" element={<Navigate to={ROUTES.CAREERS} replace />} />
                     <Route
                       path={ROUTES.PROFILE}
