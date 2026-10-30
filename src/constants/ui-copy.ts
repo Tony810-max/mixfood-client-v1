@@ -35,7 +35,7 @@ export const uiCopy: Record<string, string> = {
   'Quantity': 'Số lượng', 'Decrease quantity': 'Giảm số lượng', 'Increase quantity': 'Tăng số lượng', 'Toggle Sidebar': 'Bật/tắt thanh bên',
   "The page you're looking for doesn't exist or has been moved.": 'Trang bạn đang tìm không tồn tại hoặc đã được chuyển đi.',
   'Chat with bot': 'Chat với bot', 'Chat with staff': 'Chat với nhân viên',
-  'Recruitment': 'Tuyển dụng', 'Mix Food is hiring': 'Mix Food tuyển dụng', 'Part-time jobs in Da Nang.': 'Tuyển dụng việc làm part-time tại Đà Nẵng.',
+  'Recruitment': 'Tuyển dụng', 'Mix Food is hiring': 'Mix Food tuyển dụng', 'Part-time & full-time jobs in Da Nang.': 'Tuyển dụng part-time & full-time tại Đà Nẵng.',
   'Join our service, kitchen and parking teams. Discuss a suitable part-time or full-time schedule at your interview.': 'Mix Food tìm đồng đội tận tâm cho các vị trí nhân viên phục vụ, phụ bếp và giữ xe. Ứng viên có thể trao đổi ca làm part-time hoặc full-time phù hợp khi phỏng vấn.',
   '← All positions': '← Tất cả vị trí tuyển dụng', 'Loading vacancies…': 'Đang tải vị trí tuyển dụng…',
   'Unable to load recruitment information. Please try again.': 'Chưa tải được thông tin tuyển dụng. Vui lòng thử lại.', 'Try again': 'Thử lại',

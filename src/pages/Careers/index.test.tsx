@@ -19,6 +19,18 @@ beforeEach(() => { document.cookie = 'lang=vn;path=/'; });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe('Recruitment discovery', () => {
+  it('shows configured working hours and hides paused positions', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response([
+      { ...job, workingHours: '17:00–22:00' },
+      { ...job, id: 2, position: 'PARKING', isActive: false },
+    ])));
+    show();
+    expect(await screen.findByText('17:00–22:00')).toBeInTheDocument();
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+    expect(screen.queryByRole('link', { name: 'Nhân viên giữ xe' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('part-time & full-time');
+  });
+
   it('links each live job to its own page without JobPosting markup on the list', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response([job])));
     show();

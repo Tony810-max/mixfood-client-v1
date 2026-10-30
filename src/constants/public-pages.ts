@@ -28,7 +28,7 @@ export const PUBLIC_PAGE_METADATA: Record<string, PublicPageMetadata> = {
   },
   '/careers': {
     en: { title: 'Part-time and Full-time Jobs in Da Nang | Mix Food', description: 'Explore service, kitchen and parking jobs at Mix Food in Da Nang. Check current openings, employment types and salaries, then apply online.', breadcrumbName: 'Careers at Mix Food' },
-    title: 'Tuyển dụng nhân viên part-time tại Đà Nẵng | Mix Food',
+    title: 'Tuyển dụng part-time & full-time tại Đà Nẵng | Mix Food',
     description: 'Mix Food tuyển dụng tại Đà Nẵng: nhân viên phục vụ part-time/full-time, phụ bếp và giữ xe. Xem vị trí đang tuyển, số lượng và ứng tuyển trực tuyến.',
     breadcrumbName: 'Tuyển dụng Mix Food',
     keywords: [

@@ -12,5 +12,6 @@ export type Recruitment = {
   createdAt: string;
   employmentTypes?: ('PART_TIME' | 'FULL_TIME')[];
   salaryAmount?: number | null;
+  workingHours?: string | null;
   salaryUnit?: 'HOUR' | 'MONTH';
 };

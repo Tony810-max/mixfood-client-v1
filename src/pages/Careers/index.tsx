@@ -56,6 +56,7 @@ export default function CareersPage() {
         description: `${labels[job.position].seo} ${labels[job.position].description} Mix Food đang cần tuyển ${job.vacancies} vị trí.`,
         datePosted: new Date(job.createdAt).toISOString().slice(0, 10),
         employmentType: job.employmentTypes ?? ['PART_TIME', 'FULL_TIME'],
+        ...(job.workingHours?.trim() ? { workHours: job.workingHours.trim() } : {}),
         ...(job.salaryAmount ? { baseSalary: { '@type': 'MonetaryAmount', currency: 'VND', value: { '@type': 'QuantitativeValue', value: job.salaryAmount, unitText: job.salaryUnit === 'MONTH' ? 'MONTH' : 'HOUR' } } } : {}),
         hiringOrganization: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url, email: RESTAURANT.email },
         jobLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', streetAddress: RESTAURANT.address, addressLocality: ui("Đà Nẵng"), addressCountry: 'VN' } },
@@ -72,13 +73,13 @@ export default function CareersPage() {
       <section className="border-b border-border bg-secondary/35 py-14 md:py-20">
         <div className="page-container max-w-4xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[.16em] text-primary"><BriefcaseBusiness className="size-4" /> {ui("Mix Food tuyển dụng") }</span>
-          <h1 className="mt-5 font-serif text-4xl font-semibold tracking-tight md:text-5xl">{selectedRole ? `Tuyển ${selectedRole.vn.toLowerCase()} tại Đà Nẵng` : ui("Tuyển dụng việc làm part-time tại Đà Nẵng.")}</h1>
+          <h1 className="mt-5 font-serif text-4xl font-semibold tracking-tight md:text-5xl">{selectedRole ? `Tuyển ${selectedRole.vn.toLowerCase()} tại Đà Nẵng` : ui("Tuyển dụng part-time & full-time tại Đà Nẵng.")}</h1>
           <p className="mx-auto mt-5 max-w-2xl leading-7 text-muted-foreground">{ui("Mix Food tìm đồng đội tận tâm cho các vị trí nhân viên phục vụ, phụ bếp và giữ xe. Ứng viên có thể trao đổi ca làm part-time hoặc full-time phù hợp khi phỏng vấn.") }</p>
         </div>
       </section>
       <section className="page-container py-12 md:py-16">
         {slug && <Link to="/careers" className="mb-6 inline-block text-primary hover:underline">{ui("← Tất cả vị trí tuyển dụng") }</Link>}
-        {loading ? <p className="py-16 text-center text-muted-foreground">{ui("Đang tải vị trí tuyển dụng…") }</p> : error ? <div role="alert" className="py-16 text-center"><p>{ui("Chưa tải được thông tin tuyển dụng. Vui lòng thử lại.") }</p><Button className="mt-4" onClick={() => setAttempt((value) => value + 1)}>{ui("Thử lại") }</Button></div> : visiblePositions.length === 0 ? <p className="rounded-2xl border bg-card px-6 py-16 text-center text-muted-foreground">{ui("Hiện chưa có vị trí tuyển dụng. Vui lòng quay lại sau.") }</p> : <div className={`grid gap-5 ${slug ? 'mx-auto max-w-3xl' : 'md:grid-cols-3'}`}>
+        {loading ? <p className="py-16 text-center text-muted-foreground">{ui("Đang tải vị trí tuyển dụng…") }</p> : error ? <div role="alert" className="py-16 text-center"><p>{ui("Chưa tải được thông tin tuyển dụng. Vui lòng thử lại.") }</p><Button className="mt-4" onClick={() => setAttempt((value) => value + 1)}>{ui("Thử lại") }</Button></div> : visiblePositions.length === 0 ? <p className="rounded-2xl border bg-card px-6 py-16 text-center text-muted-foreground">{ui("Hiện chưa có vị trí tuyển dụng. Vui lòng quay lại sau.") }</p> : <div className={`grid gap-5 ${slug || visiblePositions.length === 1 ? 'mx-auto max-w-3xl' : visiblePositions.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
           {visiblePositions.map((job) => {
             const position = labels[job.position];
             return <article key={job.id} className={`grid gap-5 rounded-3xl border border-border bg-card p-6 shadow-layered ${slug ? '' : 'md:row-span-5 md:grid-rows-subgrid'}`}>
@@ -93,7 +94,7 @@ export default function CareersPage() {
               <div className="space-y-3 border-t border-border pt-5 text-sm text-muted-foreground">
                 <p className="flex items-center gap-2.5"><UsersRound className="size-4 shrink-0 text-primary" aria-hidden="true" /><span>{ui("Cần tuyển:")} <b className="font-semibold text-foreground">{job.vacancies} {ui("vị trí")}</b></span></p>
                 <p className="flex items-center gap-2.5"><MapPin className="size-4 shrink-0 text-primary" aria-hidden="true" /><span>{ui("Đà Nẵng")}</span></p>
-                <p className="flex items-center gap-2.5"><Clock3 className="size-4 shrink-0 text-primary" aria-hidden="true" /><span>{ui("Trao đổi khi phỏng vấn")}</span></p>
+                <p className="flex items-center gap-2.5"><Clock3 className="size-4 shrink-0 text-primary" aria-hidden="true" /><span className="whitespace-pre-line break-words">{job.workingHours?.trim() || ui("Trao đổi khi phỏng vấn")}</span></p>
               </div>
               <div className="flex flex-wrap content-start gap-2">{(job.employmentTypes ?? ['PART_TIME', 'FULL_TIME']).map((type) => <span key={type} className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">{ui(type === 'PART_TIME' ? 'Part-time' : 'Full-time')}</span>)}</div>
               <div className="border-t border-border pt-4">
