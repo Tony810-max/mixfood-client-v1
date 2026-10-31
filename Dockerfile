@@ -30,8 +30,10 @@ COPY . .
 # VITE_* vars are inlined at build time.
 # Pass the production API URL via --build-arg when building, e.g.:
 #   --build-arg VITE_API_BASE_URL=https://api.mix-food.io.vn
-ARG VITE_API_BASE_URL=http://localhost:3001
+ARG VITE_API_BASE_URL=https://api.mix-food.io.vn
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+ARG VITE_SITE_URL=https://mix-food.io.vn
+ENV VITE_SITE_URL=$VITE_SITE_URL
 
 RUN pnpm build
 

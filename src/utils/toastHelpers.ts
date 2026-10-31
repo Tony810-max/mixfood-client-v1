@@ -1,3 +1,4 @@
+import { translateUi } from '@/lib/localization';
 /**
  * Centralized toast notification helpers
  * Provides consistent toast notifications across the application
@@ -17,7 +18,7 @@ export type ToastOptions = {
  */
 export const showSuccessToast = (message: string, options?: ToastOptions) => {
   logger.info('Success toast shown', { message });
-  toast.success(message, options);
+  toast.success(translateUi(message), options);
 };
 
 /**
@@ -26,7 +27,7 @@ export const showSuccessToast = (message: string, options?: ToastOptions) => {
 export const showErrorToast = (message: string, options?: ToastOptions) => {
   console.log('[showErrorToast] Showing error toast:', message);
   logger.error('Error toast shown', { message });
-  toast.error(message, options);
+  toast.error(translateUi(message), options);
 };
 
 /**
@@ -34,7 +35,7 @@ export const showErrorToast = (message: string, options?: ToastOptions) => {
  */
 export const showWarningToast = (message: string, options?: ToastOptions) => {
   logger.warn('Warning toast shown', { message });
-  toast.warning(message, options);
+  toast.warning(translateUi(message), options);
 };
 
 /**
@@ -42,7 +43,7 @@ export const showWarningToast = (message: string, options?: ToastOptions) => {
  */
 export const showInfoToast = (message: string, options?: ToastOptions) => {
   logger.info('Info toast shown', { message });
-  toast.info(message, options);
+  toast.info(translateUi(message), options);
 };
 
 /**
@@ -51,7 +52,7 @@ export const showInfoToast = (message: string, options?: ToastOptions) => {
 export const showApiErrorToast = (error: unknown, defaultMessage = 'Có lỗi xảy ra. Vui lòng thử lại.') => {
   const errorMessage = getApiErrorMessage(error);
   logger.error('API error toast shown', { error, errorMessage });
-  toast.error(errorMessage || defaultMessage);
+  toast.error(translateUi(errorMessage || defaultMessage));
 };
 
 /**

@@ -3,7 +3,7 @@ import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage, useUiText } from "@/contexts/LanguageContext";
 import { useForgotPassword } from "@/hooks/useForgotPassword";
 import { ROUTES } from "@/utils/const";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
   const { t } = useLanguage();
+  const ui = useUiText();
   const navigate = useNavigate();
   const {
     step,
@@ -106,7 +107,7 @@ const ForgotPasswordPage = () => {
               disabled={isLoading}
             />
           </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-sm text-destructive">{ui(error)}</p>}
         </div>
         <Button
           className="w-full h-11 bg-primary-gradient font-semibold shadow-md hover:shadow-lg hover:brightness-95 transition-all"
@@ -165,7 +166,7 @@ const ForgotPasswordPage = () => {
             value={otp}
             onChange={setOtp}
             disabled={isLoading}
-            error={error}
+            error={ui(error)}
           />
         </div>
         <CountdownTimer
@@ -243,7 +244,7 @@ const ForgotPasswordPage = () => {
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          {errors.newPassword && <p className="text-sm text-destructive">{errors.newPassword}</p>}
+          {errors.newPassword && <p className="text-sm text-destructive">{ui(errors.newPassword)}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="confirmPassword" className="text-sm font-medium">
@@ -268,7 +269,7 @@ const ForgotPasswordPage = () => {
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
+          {errors.confirmPassword && <p className="text-sm text-destructive">{ui(errors.confirmPassword)}</p>}
         </div>
         <div className="flex gap-3">
           <Button

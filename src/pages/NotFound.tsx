@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ROUTES } from "@/utils/const";
 import { motion } from "framer-motion";
@@ -7,6 +9,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
+  const ui = useUiText();
   const location = useLocation();
   const { t } = useLanguage();
 
@@ -40,13 +43,11 @@ const NotFound = () => {
 
         {/* 404 */}
         <h1 className="text-8xl font-black bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent leading-none mb-4">
-          404
-        </h1>
+          {ui("404") } </h1>
 
         <h2 className="text-2xl font-bold text-foreground mb-3">{t.notFoundMessage}</h2>
         <p className="text-muted-foreground mb-8 leading-relaxed">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
+          {ui("The page you're looking for doesn't exist or has been moved.") } </p>
 
         <Button
           asChild

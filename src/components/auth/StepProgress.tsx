@@ -1,3 +1,4 @@
+import { useUiText } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
@@ -27,6 +28,7 @@ export const StepProgress = ({ currentStep, steps, className }: StepProgressProp
   // column i is always centered at (i + 0.5) / n of the row, full stop.
   const halfColumn = `${50 / n}%`;
 
+  const ui = useUiText();
   return (
     <div className={cn("w-full mb-8", className)}>
       <div
@@ -85,7 +87,7 @@ export const StepProgress = ({ currentStep, steps, className }: StepProgressProp
                   isPending && "text-gray-400"
                 )}
               >
-                {step.label}
+                {ui(step.label)}
               </motion.span>
             </div>
           );

@@ -1,4 +1,6 @@
 
+import { useUiText } from '@/contexts/LanguageContext';
+
 import { AuthCard, AuthFormLayout, AuthHeader, AuthLogo } from "@/components/auth";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
@@ -17,6 +19,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const ui = useUiText();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -157,7 +160,7 @@ const LoginPage = () => {
                   type="button"
                   onClick={() => setShowPassword((visible) => !visible)}
                   className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? ui("Hide password") : ui("Show password")}
                   aria-pressed={showPassword}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

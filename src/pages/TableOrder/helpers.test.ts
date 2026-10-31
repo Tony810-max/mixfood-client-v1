@@ -1,8 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { formatVND, generateIdempotencyKey, ORDER_STATUS_LABEL } from "./helpers";
 
 describe("table-order helpers", () => {
+  afterEach(() => { document.cookie = "lang=;max-age=0;path=/"; });
   it("formats totals using Vietnamese currency", () => {
+    document.cookie = "lang=vn;path=/";
     expect(formatVND(125_000)).toMatch(/125[.\s]000\s?₫/);
   });
 

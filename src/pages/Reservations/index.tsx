@@ -1,3 +1,7 @@
+
+import { translateUi } from '@/lib/localization';
+
+import { useUiText } from '@/contexts/LanguageContext';
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -17,6 +21,7 @@ import { ReservationCard } from "./components/ReservationCard";
 import { ReservationsStats } from "./components/ReservationsStats";
 
 const ReservationsPage = () => {
+  const ui = useUiText();
   const { t, lang } = useLanguage();
   const { isAuthenticated } = useAuth();
   const { reservations, isLoading, stats, refreshReservations, filterReservations, sortReservations } = useReservations();
@@ -33,7 +38,7 @@ const ReservationsPage = () => {
     setIsRefreshDisabled(true);
     setHasAnimated(false);
     refreshReservations();
-    toast.success(t.reservationsRefreshSuccess, {
+    toast.success(translateUi(t.reservationsRefreshSuccess), {
       duration: 2000,
     });
 
@@ -46,7 +51,7 @@ const ReservationsPage = () => {
     setCancellingId(id);
     cancelMutation.mutate({ id, reason }, {
       onSuccess: () => {
-        toast.success(t.reservationCancelSuccess || "Reservation cancelled successfully");
+        toast.success(translateUi(t.reservationCancelSuccess || ui("Reservation cancelled successfully")));
         setCancellingId(null);
       },
       onError: () => {
@@ -144,11 +149,11 @@ const ReservationsPage = () => {
               <ReservationsStats
                 stats={stats}
                 labels={{
-                  total: t.reservationsTotal || "Tổng",
-                  pending: t.reservationsStatusPending || "Chờ xác nhận",
-                  confirmed: t.reservationsStatusConfirmed || "Đã xác nhận",
-                  arrived: "Đã đến",
-                  cancelled: t.reservationsStatusCancelled || "Đã hủy",
+                  total: t.reservationsTotal || ui("Tổng"),
+                  pending: t.reservationsStatusPending || ui("Chờ xác nhận"),
+                  confirmed: t.reservationsStatusConfirmed || ui("Đã xác nhận"),
+                  arrived: ui("Đã đến"),
+                  cancelled: t.reservationsStatusCancelled || ui("Đã hủy"),
                 }}
               />
 
@@ -169,20 +174,20 @@ const ReservationsPage = () => {
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="flex-1 sm:flex-none hover:bg-primary-gradient">
                           <ChevronDown className="h-4 w-4 mr-2" />
-                          {sortBy === "date-desc" ? (t.reservationsSortNewest || "Mới nhất") :
-                           sortBy === "date-asc" ? (t.reservationsSortOldest || "Cũ nhất") :
-                           (t.reservationsSortStatus || "Theo trạng thái")}
+                          {sortBy === "date-desc" ? (t.reservationsSortNewest || ui("Mới nhất")) :
+                           sortBy === "date-asc" ? (t.reservationsSortOldest || ui("Cũ nhất")) :
+                           (t.reservationsSortStatus || ui("Theo trạng thái"))}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={(e) => { e.preventDefault(); setSortBy("date-desc"); }}>
-                          {t.reservationsSortNewest || "Mới nhất"}
+                          {t.reservationsSortNewest || ui("Mới nhất")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={(e) => { e.preventDefault(); setSortBy("date-asc"); }}>
-                          {t.reservationsSortOldest || "Cũ nhất"}
+                          {t.reservationsSortOldest || ui("Cũ nhất")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={(e) => { e.preventDefault(); setSortBy("status"); }}>
-                          {t.reservationsSortStatus || "Theo trạng thái"}
+                          {t.reservationsSortStatus || ui("Theo trạng thái")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -190,7 +195,7 @@ const ReservationsPage = () => {
                       variant="outline"
                       size="icon"
                       onClick={handleRefresh}
-                      title={t.reservationsRefresh || "Làm mới"}
+                      title={t.reservationsRefresh || ui("Làm mới")}
                       className="hover:bg-primary-gradient shrink-0"
                       disabled={isRefreshDisabled}
                     >
@@ -204,16 +209,16 @@ const ReservationsPage = () => {
               <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
                 <TabsList className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-orange-200 dark:border-orange-900/50 flex flex-wrap h-auto gap-1 p-1">
                   <TabsTrigger value="all" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white text-xs sm:text-sm">
-                    {t.reservationsTabAll || "Tất cả"} ({stats.total})
+                    {t.reservationsTabAll || ui("Tất cả")} ({stats.total})
                   </TabsTrigger>
                   <TabsTrigger value={RESERVATION_STATUS.PENDING} className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white text-xs sm:text-sm">
-                    {t.reservationsStatusPending || "Chờ xác nhận"} ({stats.pending})
+                    {t.reservationsStatusPending || ui("Chờ xác nhận")} ({stats.pending})
                   </TabsTrigger>
                   <TabsTrigger value={RESERVATION_STATUS.CONFIRMED} className="data-[state=active]:bg-green-500 data-[state=active]:text-white text-xs sm:text-sm">
-                    {t.reservationsStatusConfirmed || "Đã xác nhận"} ({stats.confirmed})
+                    {t.reservationsStatusConfirmed || ui("Đã xác nhận")} ({stats.confirmed})
                   </TabsTrigger>
                   <TabsTrigger value={RESERVATION_STATUS.CANCELLED} className="data-[state=active]:bg-red-500 data-[state=active]:text-white text-xs sm:text-sm">
-                    {t.reservationsStatusCancelled || "Đã hủy"} ({stats.cancelled})
+                    {t.reservationsStatusCancelled || ui("Đã hủy")} ({stats.cancelled})
                   </TabsTrigger>
                 </TabsList>
 
@@ -228,10 +233,10 @@ const ReservationsPage = () => {
                       <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-orange-200 dark:border-orange-900/50 p-8 sm:p-12">
                         <Calendar className="h-16 w-16 text-orange-500 mx-auto mb-4" />
                         <h3 className="text-xl font-semibold text-foreground mb-2">
-                          {activeTab === "all" ? t.reservationsEmpty : (t.reservationsEmptyFiltered || "Không có đặt bàn nào")}
+                          {activeTab === "all" ? t.reservationsEmpty : (t.reservationsEmptyFiltered || ui("Không có đặt bàn nào"))}
                         </h3>
                         <p className="text-muted-foreground mb-6">
-                          {activeTab === "all" ? t.reservationsEmptyMessage : (t.reservationsEmptyFilteredMessage || "Không tìm thấy đặt bàn nào phù hợp với bộ lọc")}
+                          {activeTab === "all" ? t.reservationsEmptyMessage : (t.reservationsEmptyFilteredMessage || ui("Không tìm thấy đặt bàn nào phù hợp với bộ lọc"))}
                         </p>
                         {activeTab === "all" && (
                           <Button
@@ -255,21 +260,21 @@ const ReservationsPage = () => {
                           isCancelling={cancellingId === reservation.id}
                           labels={{
                             date: t.reservationsDate || "Ngày",
-                            time: t.reservationsTime || "Giờ",
+                            time: t.reservationsTime || ui("Giờ"),
                             guests: t.reservationsGuests || "Khách",
-                            guest: t.reservationsGuest || "khách",
-                            phone: t.reservationsPhone || "Điện thoại",
+                            guest: t.reservationsGuest || ui("khách"),
+                            phone: t.reservationsPhone || ui("Điện thoại"),
                             note: t.reservationsNote || "Ghi chú",
-                            cancel: t.reservationsCancel || "Hủy",
-                            cancelDialogTitle: t.reservationCancelDialogTitle || "Cancel Reservation",
+                            cancel: t.reservationsCancel || ui("Hủy"),
+                            cancelDialogTitle: t.reservationCancelDialogTitle || ui("Cancel Reservation"),
                             cancelDialogDescription: t.reservationCancelDialogDescription || 'Are you sure you want to cancel the reservation for "{name}"?',
                             cancelDialogCancel: t.reservationCancelDialogKeep || "Keep",
-                            cancelDialogConfirm: t.reservationCancelDialogConfirm || "Yes, cancel",
-                            cancelDialogConfirming: t.reservationCancelDialogConfirming || "Cancelling...",
-                            cancelledBy: lang === 'vn' ? 'Người huỷ' : 'Cancelled by',
-                            cancelledByUser: lang === 'vn' ? 'Bạn' : 'You',
-                            cancelledByAdmin: lang === 'vn' ? 'Nhà hàng' : 'Restaurant admin',
-                            cancellationReason: lang === 'vn' ? 'Lý do' : 'Reason',
+                            cancelDialogConfirm: t.reservationCancelDialogConfirm || ui("Yes, cancel"),
+                            cancelDialogConfirming: t.reservationCancelDialogConfirming || ui("Cancelling..."),
+                            cancelledBy: lang === 'vn' ? ui("Người huỷ") : ui("Cancelled by"),
+                            cancelledByUser: lang === 'vn' ? ui("Bạn") : ui("You"),
+                            cancelledByAdmin: lang === 'vn' ? ui("Nhà hàng") : ui("Restaurant admin"),
+                            cancellationReason: lang === 'vn' ? ui("Lý do") : ui("Reason"),
                             cancellationReasonPlaceholder: t.reservationsCancellationReasonPlaceholder,
                             cancellationReasonHint: t.reservationsCancellationReasonHint,
                           }}

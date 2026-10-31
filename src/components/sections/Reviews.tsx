@@ -1,32 +1,32 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 const reviews = [
   {
-    name: "Sarah Johnson",
-    avatar: "SJ",
+    name: "Bảo Yến",
     rating: 5,
-    en: "The Tom Yum Goong was absolutely divine! Authentic flavors that transported me straight to Bangkok. The ambiance is warm and elegant.",
-    vn: "Tom Yum Goong thật tuyệt vời! Hương vị đích thực đưa tôi trở lại Bangkok. Không gian ấm cúng và sang trọng.",
+    en: "A varied Thai menu with rich flavours and tender food. The upstairs air-conditioned area is comfortable; the restaurant is in an alley, but the food is worth finding.",
+    vn: "Đồ Thái ở đây siêu nhiều, vị đậm đà mà giá mềm. Ngồi tầng 2 có điều hoà khá thoải mái. Quán nằm trong hẻm nên đi ô tô hơi bất tiện, đồ ăn chế biến hơi lâu nhưng xứng đáng chờ.",
   },
   {
-    name: "Nguyễn Minh Tuấn",
-    avatar: "NT",
+    name: "RJC",
     rating: 5,
-    en: "Best Thai food in Da Nang, hands down. The Green Curry is perfectly balanced. We come here every weekend now.",
-    vn: "Đồ ăn Thái ngon nhất Đà Nẵng. Cà Ri Xanh cân bằng hoàn hảo. Tuần nào chúng tôi cũng đến đây.",
+    en: "Really good food from Mix Food Am Thuc Thai! Everything was tasty and full of flavour. I really enjoyed the meal and would definitely recommend giving them a try. I’ll be ordering again from them!",
+    vn: "Đồ ăn ở Mix Food Ẩm Thực Thái rất ngon! Món nào cũng đậm đà. Tôi rất thích bữa ăn này và sẽ giới thiệu mọi người đến thử. Tôi nhất định sẽ đặt lại!",
   },
   {
-    name: "James Chen",
-    avatar: "JC",
+    name: "Hiếu",
     rating: 5,
-    en: "From the Pad Thai to the Mango Sticky Rice, everything was exceptional. The staff is incredibly welcoming. A must-visit!",
-    vn: "Từ Pad Thai đến Xôi Xoài, mọi thứ đều xuất sắc. Nhân viên rất thân thiện. Nhất định phải ghé!",
+    en: "The food is delicious and more affordable than many nearby places. The air-conditioned dining room is pleasant, and it is worth trying.",
+    vn: "Đồ ăn ngon và rẻ hơn mấy quán Thái khác, có phòng điều hòa, đáng để thử.",
   },
 ];
 
 const Reviews = () => {
+  const ui = useUiText();
   const { lang, t } = useLanguage();
 
   return (
@@ -52,23 +52,23 @@ const Reviews = () => {
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.2, 0.8, 0.2, 1] }}
               className="bg-card rounded-2xl p-5 md:p-6 shadow-layered space-y-3 md:space-y-4"
             >
-              <div className="flex gap-1">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-sm text-foreground">{review.name}</p>
+                </div>
+              </div>
+              <div className="flex gap-1" aria-label={ui('{rating} out of 5 stars', { rating: review.rating })}>
                 {Array.from({ length: review.rating }).map((_, j) => (
                   <Star key={j} size={16} className="fill-primary text-primary" />
                 ))}
               </div>
-              <p className="text-foreground/80 text-sm leading-relaxed italic">
-                "{lang === "vn" ? review.vn : review.en}"
+              <p className="text-foreground/80 text-sm leading-relaxed">
+                {lang === "vn" ? review.vn : review.en}
               </p>
-              <div className="flex items-center gap-3 pt-2">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
-                  {review.avatar}
-                </div>
-                <span className="font-medium text-sm text-foreground">{review.name}</span>
-              </div>
             </motion.div>
           ))}
         </div>
+        <p className="mt-6 text-center text-xs text-muted-foreground">{ui("Nguồn đánh giá: Google Maps.") }</p>
       </div>
     </section>
   );

@@ -1,3 +1,5 @@
+
+import { useUiText } from '@/contexts/LanguageContext';
 import {
     Select,
     SelectContent,
@@ -14,18 +16,19 @@ interface DropdownCategoryProps {
 }
 
 export default function DropdownCategory({ onSelectCategory }: DropdownCategoryProps) {
+  const ui = useUiText();
     const { lang } = useLanguage()
     const { data: categories } = useMenu()
 
     return (
         <Select onValueChange={(value) => onSelectCategory?.(value === "all" ? null : value)}>
             <SelectTrigger className="md:w-[180px] rounded-xl">
-                <SelectValue placeholder={lang === "vn" ? "Tất cả danh mục" : "All Categories"} />
+                <SelectValue placeholder={lang === "vn" ? ui("Tất cả danh mục") : "All Categories"} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
                     <SelectItem value="all">
-                        {lang === "vn" ? "Tất cả" : "All"}
+                        {lang === "vn" ? ui("Tất cả") : ui("All")}
                     </SelectItem>
                     {categories?.map((category) => (
                         <SelectItem key={category.id} value={category.id}>

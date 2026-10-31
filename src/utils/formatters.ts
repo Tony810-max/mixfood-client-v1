@@ -1,3 +1,4 @@
+import { getUiLocale } from '@/lib/localization';
 /**
  * Utility functions for formatting various data types
  * Provides consistent formatting across the application
@@ -34,7 +35,7 @@ export const formatVerificationCode = (value: string): string => {
  */
 export const formatCurrency = (amount: number): string => {
   try {
-    return new Intl.NumberFormat('vi-VN', {
+    return new Intl.NumberFormat(getUiLocale(), {
       style: 'currency',
       currency: 'VND',
     }).format(amount);
@@ -49,7 +50,7 @@ export const formatCurrency = (amount: number): string => {
  */
 export const formatNumber = (value: number): string => {
   try {
-    return new Intl.NumberFormat('vi-VN').format(value);
+    return new Intl.NumberFormat(getUiLocale()).format(value);
   } catch (error) {
     logger.error('Failed to format number', error);
     return String(value);

@@ -166,9 +166,9 @@ export async function sendMessage(sessionToken: string, message: string): Promis
 }
 
 /** Chatbot conversations are deliberately not persisted. */
-export async function getChatbotReply(sessionToken: string, message: string): Promise<{ message: string }> {
+export async function getChatbotReply(sessionToken: string, message: string, language: 'en' | 'vn' = 'vn'): Promise<{ message: string }> {
   const api = sessionApi(sessionToken);
-  const res = await api.post('/customer/chatbot/reply', { message });
+  const res = await api.post('/customer/chatbot/reply', { message, language });
   return res.data;
 }
 

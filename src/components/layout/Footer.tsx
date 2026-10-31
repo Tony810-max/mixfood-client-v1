@@ -3,7 +3,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import ContactInfo from "./Footer/ContactInfo";
 import QuickLinks from "./Footer/QuickLinks";
 import RestaurantInfo from "./Footer/RestaurantInfo";
-import ThaiDishes from "./Footer/ThaiDishes";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -13,10 +12,9 @@ const Footer = () => {
   return (
     <footer className="bg-foreground text-background">
       <div className="page-container py-10 md:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
           <RestaurantInfo />
           <QuickLinks />
-          <ThaiDishes />
           <ContactInfo />
         </div>
 
