@@ -2,35 +2,26 @@
 import { useUiText } from '@/contexts/LanguageContext';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
-import { ExternalLink, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 const reviews = [
   {
     name: "Bảo Yến",
-    meta: "Local Guide · 137 bài đánh giá · 935 ảnh",
-    time: "12 tuần trước",
     rating: 5,
     en: "A varied Thai menu with rich flavours and tender food. The upstairs air-conditioned area is comfortable; the restaurant is in an alley, but the food is worth finding.",
     vn: "Đồ Thái ở đây siêu nhiều, vị đậm đà mà giá mềm. Ngồi tầng 2 có điều hoà khá thoải mái. Quán nằm trong hẻm nên đi ô tô hơi bất tiện, đồ ăn chế biến hơi lâu nhưng xứng đáng chờ.",
-    details: "Đồ ăn: 5/5 · Dịch vụ: 5/5 · Bầu không khí: 5/5",
   },
   {
     name: "RJC",
-    meta: "Local Guide · 69 bài đánh giá · 134 ảnh",
-    time: "8 tuần trước",
     rating: 5,
     en: "Really good food from Mix Food Am Thuc Thai! Everything was tasty and full of flavour. I really enjoyed the meal and would definitely recommend giving them a try. I’ll be ordering again from them!",
     vn: "Đồ ăn ở Mix Food Ẩm Thực Thái rất ngon! Món nào cũng đậm đà. Tôi rất thích bữa ăn này và sẽ giới thiệu mọi người đến thử. Tôi nhất định sẽ đặt lại!",
-    details: "Giao tận nơi · Bữa tối · 100–200 N ₫",
   },
   {
     name: "Hiếu",
-    meta: "Local Guide · 45 bài đánh giá · 18 ảnh",
-    time: "5 tuần trước",
     rating: 5,
     en: "The food is delicious and more affordable than many nearby places. The air-conditioned dining room is pleasant, and it is worth trying.",
     vn: "Đồ ăn ngon và rẻ hơn mấy quán Thái khác, có phòng điều hòa, đáng để thử.",
-    details: "Ăn tại chỗ · Bữa tối · 100–200 N ₫",
   },
 ];
 
@@ -63,10 +54,8 @@ const Reviews = () => {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-semibold text-sm text-foreground">{review.name} <ExternalLink className="ml-0.5 inline size-3 text-primary" /></p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{ui(review.meta)}</p>
+                  <p className="font-semibold text-sm text-foreground">{review.name}</p>
                 </div>
-                <span className="shrink-0 text-xs text-muted-foreground">{ui(review.time)}</span>
               </div>
               <div className="flex gap-1" aria-label={ui('{rating} out of 5 stars', { rating: review.rating })}>
                 {Array.from({ length: review.rating }).map((_, j) => (
@@ -76,7 +65,6 @@ const Reviews = () => {
               <p className="text-foreground/80 text-sm leading-relaxed">
                 {lang === "vn" ? review.vn : review.en}
               </p>
-              <p className="border-t border-border/70 pt-3 text-xs font-medium text-muted-foreground">{ui(review.details)}</p>
             </motion.div>
           ))}
         </div>

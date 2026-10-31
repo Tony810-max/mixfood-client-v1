@@ -40,7 +40,7 @@ const MenuContent = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-20">
+      <main className="pt-16 md:pt-20">
         <section className="overflow-hidden border-b border-border/70 bg-secondary/30">
           <div className="page-container grid items-center gap-7 py-10 sm:py-14 md:grid-cols-[1fr_auto]">
             <div className="max-w-2xl">
@@ -53,20 +53,19 @@ const MenuContent = () => {
           </div>
         </section>
 
-        <div className="sticky top-20 z-30 border-b border-border/70 bg-background/95 backdrop-blur-md">
+        <div className="sticky top-16 md:top-20 z-30 border-b border-border/70 bg-background/95 backdrop-blur-md">
           <div className="page-container py-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p aria-live="polite" className="text-xs text-muted-foreground">{isLoading ? t.menuLoading : error ? t.menuLoadError : <><span className="font-semibold text-foreground">{count}</span> {vn ? "món ăn dành cho bạn" : "dishes to discover"}</>}</p>
               <div className="w-full sm:max-w-sm"><SearchContent value={searchQuery} onSearchChange={setSearchQuery} /></div>
             </div>
-            <div className="no-scrollbar mt-3 flex gap-2 overflow-x-auto pb-1" role="group" aria-label={vn ? "Danh mục món ăn" : "Dish categories"}>
-              <button type="button" aria-pressed={!selectedCategory} onClick={() => setSelectedCategory(null)} className={"min-h-10 shrink-0 rounded-full border px-4 text-xs font-semibold transition-colors " + (!selectedCategory ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/50")}>{vn ? "Tất cả món" : "All dishes"}</button>
-              {categories?.map((category) => (
-                <button key={category.id} type="button" aria-pressed={selectedCategory === category.id} onClick={() => setSelectedCategory(category.id)} className={"min-h-10 shrink-0 rounded-full border px-4 text-xs font-semibold transition-colors " + (selectedCategory === category.id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/50")}>
-                  {category[lang] || category.en || category.vn}
-                </button>
-              ))}
-            </div>
+            <label className="mt-3 block text-xs font-medium">
+              {vn ? "Danh mục món ăn" : "Dish category"}
+              <select value={selectedCategory ?? ""} onChange={(event) => setSelectedCategory(event.target.value || null)} className="mt-2 min-h-11 w-full rounded-xl border border-border bg-card px-3 text-sm sm:max-w-sm">
+                <option value="">{vn ? "Tất cả món" : "All dishes"}</option>
+                {categories?.map((category) => <option key={category.id} value={category.id}>{category[lang] || category.en || category.vn}</option>)}
+              </select>
+            </label>
           </div>
         </div>
 

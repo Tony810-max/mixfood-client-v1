@@ -12,10 +12,10 @@ const Hero = () => {
   const vn = lang === "vn";
 
   return (
-    <section id="home" className="relative overflow-hidden bg-[radial-gradient(circle_at_90%_15%,hsl(var(--primary)/.10),transparent_28%),radial-gradient(circle_at_12%_85%,hsl(var(--secondary)/.7),transparent_34%)] pt-24 md:pt-28">
-      <div className="page-container flex min-h-[31rem] items-center pb-10 pt-6 md:min-h-[35rem] md:pb-16 md:pt-10">
+    <section id="home" className="relative overflow-hidden bg-[radial-gradient(circle_at_90%_15%,hsl(var(--primary)/.10),transparent_28%),radial-gradient(circle_at_12%_85%,hsl(var(--secondary)/.7),transparent_34%)] pt-16 md:pt-24">
+      <div className="page-container flex items-center py-5 md:py-8">
         <div className="grid items-center gap-9 lg:grid-cols-2 lg:gap-16">
-          <div className="max-w-xl py-3 lg:py-10">
+          <div className="max-w-xl py-2 lg:py-5">
             <p className="mb-5 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary sm:text-xs">
               <span className="h-px w-8 bg-primary" />{vn ? "Một chút Thái, ngay Đà Nẵng" : "A little Thailand, right in Da Nang"}
             </p>

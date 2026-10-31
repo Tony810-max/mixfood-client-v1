@@ -19,6 +19,7 @@ const MenuItemCard = ({ item, lang, index, categoryName }: {
   const ui = useUiText();
   const [open, setOpen] = useState(false);
   const reducedMotion = useReducedMotion();
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const itemName = item.name[lang] || item.name.en || item.name.vn;
   const description = item.description?.[lang]?.trim()
@@ -65,7 +66,8 @@ const MenuItemCard = ({ item, lang, index, categoryName }: {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          onCloseAutoFocus={(event) => { event.preventDefault(); triggerRef.current?.focus(); }}
+          onOpenAutoFocus={(event) => { event.preventDefault(); titleRef.current?.focus({ preventScroll: true }); }}
+          onCloseAutoFocus={(event) => { event.preventDefault(); triggerRef.current?.focus({ preventScroll: true }); }}
           className="w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-3xl border-0 bg-card p-0 sm:rounded-3xl [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:grid [&>button]:h-11 [&>button]:w-11 [&>button]:place-items-center [&>button]:rounded-full [&>button]:border [&>button]:border-border [&>button]:bg-card [&>button]:opacity-100 [&>button]:shadow-sm"
         >
           <div className="grid max-h-[calc(100dvh-2rem)] overflow-y-auto md:grid-cols-2">
@@ -74,12 +76,12 @@ const MenuItemCard = ({ item, lang, index, categoryName }: {
                 src={item.image || "/image-blank.png"}
                 onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/image-blank.png"; }}
                 alt={itemName}
-                className="aspect-[4/3] max-h-[38dvh] w-full rounded-2xl object-contain md:aspect-square md:max-h-[65dvh]"
+                className="block h-auto max-h-[50dvh] w-full rounded-2xl object-contain md:max-h-[70dvh]"
               />
             </div>
             <div className="flex flex-col p-5 sm:p-8 md:pt-14">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{categoryName || "Mix Food"}</p>
-              <DialogTitle className="font-serif text-2xl font-semibold leading-tight sm:text-3xl">{itemName}</DialogTitle>
+              <DialogTitle ref={titleRef} tabIndex={-1} className="font-serif text-2xl font-semibold leading-tight sm:text-3xl">{itemName}</DialogTitle>
               <p className="mt-4 text-2xl font-bold tabular-nums text-primary">{formatPrice(item.price)}</p>
               {!!item.tags?.length && (
                 <div className="mt-4 flex flex-wrap gap-2">{item.tags.map((tag) => <TagBadge key={tag} tag={tag} lang={lang} />)}</div>

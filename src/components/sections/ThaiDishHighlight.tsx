@@ -50,7 +50,7 @@ const ThaiDishHighlight = () => {
                 </button>
               ))}
             </div>
-            <Link to={dish.href} className="mt-6 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
+            <Link to={`${ROUTES.MENU}?q=${encodeURIComponent(dish.name)}`} className="mt-6 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
               {lang === "vn" ? "Khám phá món này" : "Explore this dish"}<ArrowRight className="h-4 w-4" />
             </Link>
           </div>

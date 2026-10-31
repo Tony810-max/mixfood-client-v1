@@ -4,8 +4,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLogout } from "@/hooks/api/useAuth";
 import { INFORMATION_RESTAURANT, ROUTES } from "@/utils/const";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Calendar, Home, LogOut, Menu, Phone, User, X } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 
 interface MobileNavProps {
@@ -14,20 +16,46 @@ interface MobileNavProps {
   setMobileOpen: (open: boolean) => void;
 }
 
-const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNavProps) => {
+const MobileNav = ({ navItems, mobileOpen, setMobileOpen }: MobileNavProps) => {
   const { t } = useLanguage();
   const { user, isAuthenticated, setUser } = useAuth();
   const logoutMutation = useLogout();
 
-  const menuItems = [
-    { icon: Home, label: t.home, href: ROUTES.HOME },
-    { icon: Menu, label: t.menu, href: ROUTES.MENU },
-  ];
+  const reducedMotion = useReducedMotion();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const menuItems = navItems.map((item, index) => ({ ...item, icon: [Home, Menu, User][index] ?? Menu }));
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const trigger = triggerRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus({ preventScroll: true });
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+      if (event.key !== "Tab") return;
+      const elements = panelRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]');
+      if (!elements?.length) return;
+      const first = elements[0], last = elements[elements.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+      trigger?.focus({ preventScroll: true });
+    };
+  }, [mobileOpen, setMobileOpen]);
 
   return (
     <>
       {/* Mobile Menu Button */}
       <button
+        ref={triggerRef}
+        aria-expanded={mobileOpen}
+        aria-controls="mobile-navigation"
         className="md:hidden text-foreground p-2 -mr-2 rounded-lg hover:bg-secondary/80 transition-colors active:scale-95"
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label={mobileOpen ? t.ariaMenuClose : t.ariaMenuOpen}
@@ -35,7 +63,7 @@ const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNav
         {mobileOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
-      <AnimatePresence>
+      {createPortal(<AnimatePresence>
         {mobileOpen && (
           <>
             {/* Backdrop Overlay */}
@@ -50,17 +78,22 @@ const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNav
 
             {/* Full Screen Menu */}
             <motion.div
-              initial={{ y: "-100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed inset-0 bg-gradient-to-b from-background via-background to-secondary/20 z-[60] md:hidden flex flex-col"
+              initial={{ x: reducedMotion ? 0 : "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: reducedMotion ? 0 : "100%" }}
+              transition={{ duration: reducedMotion ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+              ref={panelRef}
+              id="mobile-navigation"
+              role="dialog"
+              aria-modal="true"
+              aria-label={t.ariaMenuOpen}
+              className="fixed inset-y-0 right-0 w-full max-w-sm bg-gradient-to-b from-background via-background to-secondary/20 z-[60] md:hidden flex flex-col"
             >
               {/* Safe Area Top */}
               <div className="pt-safe-top" />
 
               {/* Header */}
-              <div className="flex items-center justify-between p-4 pt-6 border-b border-border/50 bg-background/80 backdrop-blur-lg">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border/50 bg-background/80 backdrop-blur-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary-gradient flex items-center justify-center">
                     <span className="text-white font-bold text-lg">M</span>
@@ -82,7 +115,7 @@ const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNav
               </div>
 
               {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto pb-24">
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4">
                 {/* Main Navigation */}
                 <div className="p-4 space-y-3">
                   {menuItems.map((item, index) => {
@@ -92,7 +125,7 @@ const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNav
                         key={item.href}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: reducedMotion ? 0 : index * 0.04 }}
                       >
                         <Link to={item.href} onClick={() => setMobileOpen(false)} className="group flex items-center gap-4 rounded-2xl border border-border/50 bg-card p-4 transition-all hover:border-primary/50 hover:shadow-lg active:scale-[0.98]">
                           <div className="rounded-xl bg-primary/10 p-3 transition-all group-hover:bg-primary/20">
@@ -189,7 +222,7 @@ const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNav
               </div>
 
               {/* Footer Contact */}
-              <div className="fixed bottom-0 left-0 right-0 p-4 pb-safe-bottom border-t border-border/50 bg-background/95 backdrop-blur-lg">
+              <div className="shrink-0 p-3 pb-safe-bottom border-t border-border/50 bg-background/95 backdrop-blur-lg">
                 <motion.a
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -209,7 +242,7 @@ const MobileNav = ({ navItems: _navItems, mobileOpen, setMobileOpen }: MobileNav
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>, document.body)}
     </>
   );
 };
